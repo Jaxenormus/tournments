@@ -17,7 +17,7 @@ const ExperienceTournamentsPage = async () => {
           Random Experience Tournaments
         </h2>
         <div className="flex items-center space-x-2">
-          <Link href="/me">
+          <Link href="/hub">
             <Button>View My Tournaments</Button>
           </Link>
         </div>

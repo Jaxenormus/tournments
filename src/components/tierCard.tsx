@@ -37,7 +37,7 @@ export const TierCard = (props: TierCardProps) => {
                 toast.error(res.error);
               } else {
                 toast.success("Successfully joined tournament");
-                router.push("/me");
+                router.push("/hub");
               }
             } catch {
               toast.error("Error occurred while joining the tournament");
