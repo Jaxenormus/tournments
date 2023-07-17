@@ -73,10 +73,10 @@ export const editTournament = async (
           .filter((old) => !tiers.some((tier) => tier.id === old.id))
           .map((tier) => ({ id: tier.id })),
         create: tiers
-          .filter((tier) => tier.id === null)
+          .filter((tier) => tier.id === null || tier.id === undefined)
           .map((tier) => ({ ...tier, id: undefined })),
         update: tiers
-          .filter((tier) => tier.id !== null)
+          .filter((tier) => tier.id !== null && tier.id !== undefined)
           .map(({ id, ...tier }) => ({
             where: { id: id as string },
             data: tier,
