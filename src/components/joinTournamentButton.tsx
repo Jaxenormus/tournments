@@ -25,7 +25,7 @@ export const JoinTournamentButton = (props: JoinTournamentButtonProps) => {
       disabled={props.tournament.status !== "ACTIVE" || props.hasJoined}
       onClick={async () => {
         try {
-          const res = minDelay(async () => {
+          const res = await minDelay(async () => {
             return await props.joinTournament();
           }, 800);
           if (isActionError(res)) {
