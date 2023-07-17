@@ -117,7 +117,7 @@ export const TournamentForm = (props: TournamentFormProps) => {
                 <FormInput
                   control={form.control}
                   name={`tiers.${i}.price`}
-                  label="Price"
+                  label="Credits"
                   placeholder="100"
                   type="number"
                   onChange={(e) => {

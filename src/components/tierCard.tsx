@@ -44,7 +44,7 @@ export const TierCard = (props: TierCardProps) => {
             }
           }}
         >
-          Join for ${props.tier.price}
+          Join for {props.tier.price} credits
         </Button>
       </div>
     </div>

@@ -22,7 +22,7 @@ const ExperienceTournamentsPage = async () => {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {upcomingTournaments.map((tournament) => (
           <ExperienceTournamentCard
             key={tournament.id}

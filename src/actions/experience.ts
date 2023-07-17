@@ -64,15 +64,21 @@ export const joinExperienceTournament = async (
   });
   if (!user) return { error: "Unable to find authenticated user" };
   if (user.credits < tier.price) return { error: "Insufficient credits" };
-  const participant = await prisma.participant.upsert({
-    where: { id: `${id}-${session.user.id}` },
-    update: { tier: { connect: { id: tierId } } },
-    create: {
-      id: `${id}-${session.user.id}`,
-      user: { connect: { id: session.user.id } },
-      tournament: { connect: { id } },
-      tier: { connect: { id: tierId } },
-    },
+  return await prisma.$transaction(async (tx) => {
+    await tx.user.update({
+      where: { id: session.user.id },
+      data: { credits: { decrement: tier.price } },
+    });
+    const participant = await tx.participant.upsert({
+      where: { id: `${id}-${session.user.id}` },
+      update: { tier: { connect: { id: tierId } } },
+      create: {
+        id: `${id}-${session.user.id}`,
+        user: { connect: { id: session.user.id } },
+        tournament: { connect: { id } },
+        tier: { connect: { id: tierId } },
+      },
+    });
+    return participant;
   });
-  return participant;
 };
