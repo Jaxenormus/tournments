@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String        @id @default(uuid())
+  name            String
+  role            UserRole      @default(PLAYER)
+  credits         Int           @default(0)
+  tournaments     Tournament[]  @relation("Creator")
+  wonTournaments  Tournament[]  @relation("Winner")
+  participatingIn Participant[]
+}
+
+model Participant {
+  id           String     @id @default(uuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  tournamentId String
+  tier         Tier       @relation(fields: [tierId], references: [id], onDelete: Cascade)
+  tierId       String
+}
+
+model Tournament {
+  id           String           @id @default(uuid())
+  user         User             @relation("Creator", fields: [userId], references: [id])
+  userId       String
+  name         String
+  description  String
+  date         DateTime
+  prize        String
+  location     String
+  winner       User?            @relation("Winner", fields: [winnerId], references: [id])
+  winnerId     String?
+  status       TournamentStatus @default(DRAFT)
+  createdAt    DateTime         @default(now())
+  tiers        Tier[]
+  participants Participant[]
+}
+
+model Tier {
+  id           String        @id @default(uuid())
+  tournament   Tournament    @relation(fields: [tournamentId], references: [id])
+  tournamentId String
+  name         String
+  description  String
+  price        Int
+  createdAt    DateTime      @default(now())
+  participants Participant[]
+}
+
+enum TournamentStatus {
+  DRAFT
+  ACTIVE
+  CANCELLED
+  COMPLETED
+}
+
+enum UserRole {
+  ADMIN
+  PLAYER
+}
