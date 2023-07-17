@@ -13,15 +13,18 @@ export const ExperienceTournamentCard = (
 ) => {
   return (
     <div className="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-4">
-      <div className="space-y-4">
-        <div className="space-y-2">
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
           <h4 className="text-xl font-semibold tracking-tight">
             {props.tournament.name}
           </h4>
           <TournamentStatusBadge status={props.tournament.status} />
-          <p className="text-gray-500">{props.tournament.description}</p>
         </div>
+        <p className="text-gray-500">{props.tournament.description}</p>
         <div className="space-y-1">
+          <p className="text-gray-500 text-sm">
+            Prize: {props.tournament.prize}
+          </p>
           <p className="text-gray-500 text-sm">
             Participants: {props.tournament.participants.length}
           </p>

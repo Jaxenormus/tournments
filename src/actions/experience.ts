@@ -10,9 +10,15 @@ export const findExperienceTournament = async (id: string) => {
   return tournament;
 };
 
-export const listExperienceTournaments = async (status: TournamentStatus[]) => {
+export const listExperienceTournaments = async (
+  status: TournamentStatus[],
+  showPast = false
+) => {
   const tournaments = await prisma.tournament.findMany({
-    where: { status: { in: status }, date: { gt: new Date() } },
+    where: {
+      status: { in: status },
+      ...(showPast ? {} : { date: { gt: new Date() } }),
+    },
     include: {
       participants: { select: { id: true, user: { select: { id: true } } } },
     },
