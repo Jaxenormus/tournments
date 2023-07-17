@@ -47,8 +47,17 @@ export const joinExperienceTournament = async (
 ) => {
   const tournament = await prisma.tournament.findFirst({
     where: { id, status: "ACTIVE" },
+    include: { tiers: true },
   });
-  if (!tournament) return null;
+  if (!tournament) return { error: "Unable to find tournament" };
+  const tier = tournament.tiers.find((t) => t.id === tierId);
+  if (!tier) return { error: "Unable to find tier" };
+  const user = await prisma.user.findFirst({
+    where: { id: session.user.id },
+    select: { credits: true },
+  });
+  if (!user) return { error: "Unable to find authenticated user" };
+  if (user.credits < tier.price) return { error: "Insufficient credits" };
   const participant = await prisma.participant.upsert({
     where: { id: `${id}-${session.user.id}` },
     update: { tier: { connect: { id: tierId } } },

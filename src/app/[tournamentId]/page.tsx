@@ -1,17 +1,21 @@
 import {
   findExperienceTournament,
+  joinExperienceTournament,
   listExperienceTournamentParticipants,
 } from "@/actions/experience";
 import { ParticipantTable } from "@/components/participantsTable";
+import { TierCard } from "@/components/tierCard";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
-import { Button } from "@/components/ui/button";
-import { notFound } from "next/navigation";
+import { getRouteAuthSession } from "@/utils/getRouteAuthSession";
+import { notFound, redirect } from "next/navigation";
 
 interface TournamentHubPageProps {
   params: { tournamentId: string };
 }
 
 const TournamentHubPage = async (props: TournamentHubPageProps) => {
+  const session = await getRouteAuthSession();
+  if (!session) return redirect("/api/auth/signin");
   const tournament = await findExperienceTournament(props.params.tournamentId);
   if (!tournament) notFound();
   const participants = await listExperienceTournamentParticipants(
@@ -28,25 +32,15 @@ const TournamentHubPage = async (props: TournamentHubPageProps) => {
       <p className="text-gray-500">{tournament.description}</p>
       <div className="grid grid-cols-3 gap-4">
         {tournament.tiers.map((tier) => (
-          <div
+          <TierCard
             key={tier.id}
-            className="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-4"
-          >
-            <div>
-              <h4 className="text-xl font-semibold tracking-tight">
-                {tier.name}
-              </h4>
-              <p className="text-gray-500">{tier.description}</p>
-            </div>
-            <div className="flex items-center justify-between space-x-2">
-              <Button
-                className="w-full"
-                disabled={tournament.status !== "ACTIVE"}
-              >
-                Join for ${tier.price}
-              </Button>
-            </div>
-          </div>
+            tier={tier}
+            tournament={tournament}
+            joinTournament={async (tierId) => {
+              "use server";
+              return joinExperienceTournament(session, tournament.id, tierId);
+            }}
+          />
         ))}
       </div>
       <ParticipantTable participants={participants} />
