@@ -1,7 +1,6 @@
 "use client";
 
 import FormInput from "@/components/ui/form/formInput";
-import { Button } from "@/components/ui/button";
 import {
   FormControl,
   FormField,
@@ -17,10 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/form/core/select";
 import { TournamentStatus } from "@prisma/client";
-import { Loader2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import type { z } from "zod";
 import type { editTournamentSchema } from "@/actions/schema";
+import { LoadingFormButton } from "@/components/loadingButton";
 
 interface TournamentFormProps {
   type: "create" | "edit";
@@ -103,15 +102,9 @@ export const TournamentForm = (props: TournamentFormProps) => {
           )}
         />
       )}
-      <Button className="w-full">
-        {form.formState.isSubmitting ? (
-          <Loader2 className="animate-spin h-5 w-5" />
-        ) : props.type === "create" ? (
-          "Create"
-        ) : (
-          "Save"
-        )}
-      </Button>
+      <LoadingFormButton type="submit" className="w-full">
+        {props.type === "create" ? "Create" : "Save"}
+      </LoadingFormButton>
     </div>
   );
 };

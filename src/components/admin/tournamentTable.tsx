@@ -117,7 +117,7 @@ export const AdminTournamentTable = (props: AdminTournamentTableProps) => {
                 ))}
                 <div className="flex p-4 align-middle justify-end">
                   <TooltipProvider>
-                    <Link href={`/${row.original.id}`}>
+                    <Link href={`/admin/${row.original.id}`}>
                       <TooltipButton
                         tip="View"
                         variant="outline"

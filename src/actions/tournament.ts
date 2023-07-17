@@ -109,5 +109,12 @@ export const listParticipants = async (session: Session, id: string) => {
     },
     include: { user: true },
   });
-  return tournament;
+  const winner = await prisma.tournament.findFirst({
+    where: { id },
+    select: { winner: { select: { id: true } } },
+  });
+  return tournament.map((participant) => ({
+    ...participant,
+    isWinner: winner?.winner?.id === participant.user.id,
+  }));
 };

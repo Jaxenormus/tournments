@@ -10,8 +10,9 @@ import type { manageTournamentSchema } from "@/actions/schema";
 import { manageTournament } from "@/actions/tournament";
 import type { Session } from "next-auth";
 import type { Participant, Tournament } from "@prisma/client";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { minDelay } from "@/utils/minDelay";
+import { LoadingFormButton } from "@/components/loadingButton";
 
 interface ManageTournamentFormProps {
   id: string;
@@ -32,13 +33,11 @@ export const ManageTournamentForm = (props: ManageTournamentFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(async (values) => {
-          const tournament = await manageTournament(
-            props.session,
-            props.id,
-            values
-          );
-          toast.success("Tournament winner updated");
-          router.push(`/admin/${tournament.id}/manage`);
+          const tournament = await minDelay(async () => {
+            return await manageTournament(props.session, props.id, values);
+          }, 800);
+          toast.success("Tournament winner has been updated");
+          router.push(`/admin/${tournament.id}`);
         })}
       >
         <div className="space-y-5">
@@ -48,13 +47,18 @@ export const ManageTournamentForm = (props: ManageTournamentFormProps) => {
             label="Winner"
             placeholder="Select a winner"
             options={props.participants.map((participant) => ({
-              label: participant.id,
-              value: participant.id,
+              label:
+                participant.user.name ?? participant.userId ?? participant.id,
+              value: participant.userId,
             }))}
+            value={form.watch("winner")?.id}
+            onValueChange={(e) => {
+              form.setValue("winner", { id: e as unknown as string });
+            }}
           />
-          <Button type="submit" className="w-full">
+          <LoadingFormButton type="submit" className="w-full">
             Save
-          </Button>
+          </LoadingFormButton>
         </div>
       </form>
     </Form>

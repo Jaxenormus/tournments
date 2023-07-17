@@ -44,7 +44,10 @@ const TournamentHubPage = async (props: TournamentHubPageProps) => {
       </div>
       <TournamentStatusBadge status={tournament.status} />
       <p className="text-gray-500">{tournament.description}</p>
-      <ParticipantTable participants={participants} />
+      <ParticipantTable
+        tournamentStatus={tournament.status}
+        participants={participants}
+      />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { findTournament, listParticipants } from "@/actions/tournament";
 import { ParticipantTable } from "@/components/participantsTable";
+import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -49,8 +50,12 @@ const TournamentPage = async (props: TournamentPage) => {
           </Link>
         </div>
       </div>
+      <TournamentStatusBadge status={tournament.status} />
       <p className="text-gray-500">{tournament.description}</p>
-      <ParticipantTable participants={participants} />
+      <ParticipantTable
+        tournamentStatus={tournament.status}
+        participants={participants}
+      />
     </div>
   );
 };

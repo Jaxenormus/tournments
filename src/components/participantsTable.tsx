@@ -17,14 +17,27 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 
-import type { Participant } from "@prisma/client";
+import type { Participant, TournamentStatus } from "@prisma/client";
 import { dayjs } from "@/integrations/dayjs";
+import { Trophy, XIcon } from "lucide-react";
 
 type ParticipantWithUser = Participant & {
   user: { name: string };
+  isWinner: boolean;
 };
 
 const columns: ColumnDef<ParticipantWithUser>[] = [
+  {
+    accessorKey: "isWinner",
+    header: "Winner",
+    cell: ({ row }) => {
+      if (row.original.isWinner) {
+        return <Trophy className="stroke-yellow-500 w-5 h-5" />;
+      } else {
+        return <XIcon className="w-5 h-5" />;
+      }
+    },
+  },
   {
     accessorKey: "name",
     header: "Player Name",
@@ -42,6 +55,7 @@ const columns: ColumnDef<ParticipantWithUser>[] = [
 ];
 
 interface ParticipantTableProps {
+  tournamentStatus: TournamentStatus;
   participants: ParticipantWithUser[];
 }
 
@@ -51,6 +65,11 @@ export const ParticipantTable = (props: ParticipantTableProps) => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    state: {
+      columnVisibility: {
+        isWinner: props.tournamentStatus === "COMPLETED",
+      },
+    },
   });
   return (
     <div className="rounded-md border">

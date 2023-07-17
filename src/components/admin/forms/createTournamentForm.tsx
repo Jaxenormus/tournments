@@ -9,11 +9,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import type { z } from "zod";
 import { createTournamentSchema } from "@/actions/schema";
-import { createTournament } from "@/actions/tournament";
 
 import type { Session } from "next-auth";
-import { toast } from "sonner";
 import dayjs from "dayjs";
+import { minDelay } from "@/utils/minDelay";
+import { createTournament } from "@/actions/tournament";
+import { toast } from "sonner";
 
 interface CreateTournamentFormProps {
   session: Session;
@@ -29,9 +30,11 @@ export const CreateTournamentForm = (props: CreateTournamentFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(async (values) => {
-          const tournament = await createTournament(props.session, values);
-          toast.success("Tournament created");
-          router.push(`/admin/${tournament.id}/edit`);
+          const tournament = await minDelay(async () => {
+            return await createTournament(props.session, values);
+          }, 800);
+          toast.success("Tournament has been created");
+          router.push(`/admin/${tournament.id}`);
         })}
       >
         <TournamentForm type="create" />

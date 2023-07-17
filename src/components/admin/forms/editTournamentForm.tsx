@@ -16,6 +16,7 @@ import { editTournament } from "@/actions/tournament";
 import type { Session } from "next-auth";
 import { toast } from "sonner";
 import { dayjs } from "@/integrations/dayjs";
+import { minDelay } from "@/utils/minDelay";
 
 interface EditTournamentFormProps {
   id: string;
@@ -36,9 +37,11 @@ export const EditTournamentForm = (props: EditTournamentFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(async (values) => {
-          await editTournament(props.session, props.id, values);
-          toast.success("Tournament updated");
-          router.push("/admin");
+          const tournament = await minDelay(async () => {
+            return await editTournament(props.session, props.id, values);
+          }, 800);
+          toast.success("Tournament has been updated");
+          router.push(`/admin/${tournament.id}`);
         })}
       >
         <TournamentForm type="edit" />

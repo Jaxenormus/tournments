@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form/core/form";
+import type { SelectProps } from "@radix-ui/react-select";
 
 type FormSelectOption = {
   label: string;
@@ -31,7 +32,8 @@ type FormSelectProps<T extends FieldValues, O extends FormSelectOption> = {
   description?: string;
   options: O[];
   renderOption?: (option: O) => React.ReactNode;
-} & React.SelectHTMLAttributes<HTMLSelectElement>;
+  placeholder?: string;
+} & SelectProps;
 
 const FormSelect = <
   T extends Record<string, unknown>,
@@ -53,8 +55,8 @@ const FormSelect = <
           {label && <FormLabel>{label}</FormLabel>}
           <Select
             // @ts-expect-error - TODO: Fix this
-            onValueChange={field.onChange}
-            defaultValue={field.value as string}
+            onValueChange={props.onValueChange ?? field.onChange}
+            defaultValue={(props.value ?? field.value) as string}
             disabled={isSubmitting || props.disabled}
           >
             <FormControl>

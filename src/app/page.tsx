@@ -1,13 +1,20 @@
 import { checkHasAccess } from "@/utils/checkHasAccess";
 import { getRouteAuthSession } from "@/utils/getRouteAuthSession";
-import { notFound, redirect } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
-export const GET = async () => {
+const Redirect = async () => {
   const session = await getRouteAuthSession();
   if (!session) return redirect("/api/auth/signin");
   const hasAdminAccess = await checkHasAccess(session, true);
   if (hasAdminAccess) return redirect("/admin");
   const hasHubAccess = await checkHasAccess(session, false);
   if (hasHubAccess) return redirect("/hub");
-  return notFound();
+  return (
+    <div className="h-screen flex items-center justify-center">
+      <Loader2 className="h-5 w-5 animate-spin" />
+    </div>
+  );
 };
+
+export default Redirect;
