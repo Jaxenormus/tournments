@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form/core/form";
 
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/form/core/textarea";
 import { Input } from "@/components/ui/form/core/input";
 
 type InputOrTextArea =
