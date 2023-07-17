@@ -23,7 +23,7 @@ export const CreateTournamentForm = (props: CreateTournamentFormProps) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof createTournamentSchema>>({
     resolver: zodResolver(createTournamentSchema),
-    defaultValues: { tiers: [], date: dayjs().format("YYYY-MM-DDTHH:mm") },
+    defaultValues: { date: dayjs().format("YYYY-MM-DDTHH:mm") },
   });
   return (
     <Form {...form}>

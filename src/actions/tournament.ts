@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 
 export const createTournament = async (
   session: Session,
-  { tiers, ...input }: z.infer<typeof createTournamentSchema>
+  input: z.infer<typeof createTournamentSchema>
 ) => {
   const tournament = await prisma.tournament.create({
     data: {
@@ -32,7 +32,6 @@ export const createTournament = async (
           },
         },
       },
-      tiers: { create: tiers },
     },
   });
   return tournament;
@@ -41,7 +40,6 @@ export const createTournament = async (
 export const findTournament = async (session: Session, id: string) => {
   const tournament = await prisma.tournament.findFirst({
     where: { id, user: { id: session.user.id, role: "ADMIN" } },
-    include: { tiers: true },
   });
   return tournament;
 };
@@ -56,11 +54,10 @@ export const listTournaments = async (session: Session) => {
 export const editTournament = async (
   session: Session,
   id: string,
-  { tiers, ...input }: z.infer<typeof editTournamentSchema>
+  input: z.infer<typeof editTournamentSchema>
 ) => {
   const oldTournament = await prisma.tournament.findFirst({
     where: { id, user: { id: session.user.id, role: "ADMIN" } },
-    include: { tiers: true },
   });
   if (!oldTournament) notFound();
   const tournament = await prisma.tournament.update({
@@ -68,20 +65,6 @@ export const editTournament = async (
     data: {
       ...input,
       date: dayjs(input.date).toDate(),
-      tiers: {
-        delete: oldTournament.tiers
-          .filter((old) => !tiers.some((tier) => tier.id === old.id))
-          .map((tier) => ({ id: tier.id })),
-        create: tiers
-          .filter((tier) => tier.id === null || tier.id === undefined)
-          .map((tier) => ({ ...tier, id: undefined })),
-        update: tiers
-          .filter((tier) => tier.id !== null && tier.id !== undefined)
-          .map(({ id, ...tier }) => ({
-            where: { id: id as string },
-            data: tier,
-          })),
-      },
     },
   });
   return tournament;
@@ -95,6 +78,7 @@ export const manageTournament = async (
   const tournament = await prisma.tournament.update({
     where: { id: id, user: { id: session.user.id, role: "ADMIN" } },
     data: {
+      ...(input.winner ? { status: "COMPLETED" } : {}),
       winner: {
         ...(input.winner
           ? { connect: { id: input.winner.id } }
@@ -123,7 +107,7 @@ export const listParticipants = async (session: Session, id: string) => {
         id: id,
       },
     },
-    include: { user: true, tier: true },
+    include: { user: true },
   });
   return tournament;
 };

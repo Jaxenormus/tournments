@@ -3,8 +3,8 @@ import {
   joinExperienceTournament,
   listExperienceTournamentParticipants,
 } from "@/actions/experience";
+import { JoinTournamentButton } from "@/components/joinTournamentButton";
 import { ParticipantTable } from "@/components/participantsTable";
-import { TierCard } from "@/components/tierCard";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
 import { getRouteAuthSession } from "@/utils/getRouteAuthSession";
 import { notFound, redirect } from "next/navigation";
@@ -27,22 +27,23 @@ const TournamentHubPage = async (props: TournamentHubPageProps) => {
         <h2 className="text-3xl font-bold tracking-tight">
           Join {tournament.name}
         </h2>
+        <div className="flex items-center space-x-2">
+          <JoinTournamentButton
+            hasJoined={
+              !!participants.find(
+                (participant) => participant.user.id === session.user.id
+              )
+            }
+            tournament={tournament}
+            joinTournament={async () => {
+              "use server";
+              return joinExperienceTournament(session, tournament.id);
+            }}
+          />
+        </div>
       </div>
       <TournamentStatusBadge status={tournament.status} />
       <p className="text-gray-500">{tournament.description}</p>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {tournament.tiers.map((tier) => (
-          <TierCard
-            key={tier.id}
-            tier={tier}
-            tournament={tournament}
-            joinTournament={async (tierId) => {
-              "use server";
-              return joinExperienceTournament(session, tournament.id, tierId);
-            }}
-          />
-        ))}
-      </div>
       <ParticipantTable participants={participants} />
     </div>
   );

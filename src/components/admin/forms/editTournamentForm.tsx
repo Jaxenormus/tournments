@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import type { z } from "zod";
 
-import type { Tier, Tournament } from "@prisma/client";
+import type { Tournament } from "@prisma/client";
 
 import { editTournamentSchema } from "@/actions/schema";
 import { editTournament } from "@/actions/tournament";
@@ -20,7 +20,7 @@ import { dayjs } from "@/integrations/dayjs";
 interface EditTournamentFormProps {
   id: string;
   session: Session;
-  tournament: Tournament & { tiers: Tier[] };
+  tournament: Tournament;
 }
 
 export const EditTournamentForm = (props: EditTournamentFormProps) => {

@@ -45,6 +45,16 @@ export const TournamentForm = (props: TournamentFormProps) => {
       />
       <FormInput
         control={form.control}
+        type="number"
+        name="entryFee"
+        label="Entry Fee (in Whop Credits)"
+        placeholder="10"
+        onChange={(e) =>
+          form.setValue("entryFee", parseInt(e.target.value, 10))
+        }
+      />
+      <FormInput
+        control={form.control}
         name="prize"
         label="Prize"
         placeholder="$1000 USD Cash"
@@ -93,69 +103,6 @@ export const TournamentForm = (props: TournamentFormProps) => {
           )}
         />
       )}
-      <div className="space-y-2">
-        <FormLabel>Tiers</FormLabel>
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 bg-gray-100 rounded-md border border-gray-200 p-4 gap-4">
-            {form.watch("tiers").map((_, i) => (
-              <div
-                className="bg-white space-y-5 p-4 rounded-md w-full border border-gray-200"
-                key={i}
-              >
-                <FormInput
-                  control={form.control}
-                  name={`tiers.${i}.name`}
-                  label="Name"
-                  placeholder="Competitive"
-                />
-                <FormInput
-                  control={form.control}
-                  name={`tiers.${i}.description`}
-                  label="Description"
-                  placeholder="Compete against the best teams in the world"
-                />
-                <FormInput
-                  control={form.control}
-                  name={`tiers.${i}.price`}
-                  label="Credits"
-                  placeholder="100"
-                  type="number"
-                  onChange={(e) => {
-                    const tiers = form.watch("tiers");
-                    tiers[i].price = parseInt(e.target.value);
-                    form.setValue("tiers", tiers);
-                  }}
-                />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  className="w-full"
-                  onClick={() => {
-                    const tiers = form.watch("tiers");
-                    tiers.splice(i, 1);
-                    form.setValue("tiers", tiers);
-                  }}
-                >
-                  Delete
-                </Button>
-              </div>
-            ))}
-          </div>
-          <Button
-            className="w-full"
-            variant="outline"
-            type="button"
-            onClick={() => {
-              form.setValue("tiers", [
-                ...form.watch("tiers"),
-                { name: "", description: "", price: 0 },
-              ]);
-            }}
-          >
-            Add Tier
-          </Button>
-        </div>
-      </div>
       <Button className="w-full">
         {form.formState.isSubmitting ? (
           <Loader2 className="animate-spin h-5 w-5" />

@@ -22,7 +22,6 @@ import { dayjs } from "@/integrations/dayjs";
 
 type ParticipantWithUser = Participant & {
   user: { name: string };
-  tier: { name: string };
 };
 
 const columns: ColumnDef<ParticipantWithUser>[] = [
@@ -31,13 +30,6 @@ const columns: ColumnDef<ParticipantWithUser>[] = [
     header: "Player Name",
     accessorFn: (row) => {
       return row.user.name;
-    },
-  },
-  {
-    accessorKey: "tier",
-    header: "Tier",
-    accessorFn: (row) => {
-      return row.tier.name;
     },
   },
   {

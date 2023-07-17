@@ -6,10 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_PRISMA_URL") // uses connection pooling
-  directUrl         = env("DATABASE_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("DATABASE_URL_NON_POOLING") // used for migrations
+  provider  = "postgresql"
+  url       = env("DATABASE_PRISMA_URL") // uses connection pooling
+  directUrl = env("DATABASE_URL_NON_POOLING") // uses a direct connection
 }
 
 model User {
@@ -28,8 +27,6 @@ model Participant {
   userId       String
   tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   tournamentId String
-  tier         Tier       @relation(fields: [tierId], references: [id], onDelete: Cascade)
-  tierId       String
 }
 
 model Tournament {
@@ -39,24 +36,13 @@ model Tournament {
   name         String
   description  String
   date         DateTime
+  entryFee     Int
   prize        String
   location     String
   winner       User?            @relation("Winner", fields: [winnerId], references: [id])
   winnerId     String?
   status       TournamentStatus @default(DRAFT)
   createdAt    DateTime         @default(now())
-  tiers        Tier[]
-  participants Participant[]
-}
-
-model Tier {
-  id           String        @id @default(uuid())
-  tournament   Tournament    @relation(fields: [tournamentId], references: [id])
-  tournamentId String
-  name         String
-  description  String
-  price        Int
-  createdAt    DateTime      @default(now())
   participants Participant[]
 }
 

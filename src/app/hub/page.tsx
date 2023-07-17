@@ -1,5 +1,7 @@
 import { listExperienceTournaments } from "@/actions/experience";
+import { getHubStatistics } from "@/actions/user";
 import { ExperienceTournamentCard } from "@/components/experienceTournamentCard";
+import { StatisticCard } from "@/components/statisticCard";
 import { Button } from "@/components/ui/button";
 import { getRouteAuthSession } from "@/utils/getRouteAuthSession";
 import Link from "next/link";
@@ -8,11 +10,11 @@ import { redirect } from "next/navigation";
 const MePage = async () => {
   const session = await getRouteAuthSession();
   if (!session) return redirect("/api/auth/signin");
-  const tournaments = await listExperienceTournaments([
-    "COMPLETED",
-    "ACTIVE",
-    "CANCELLED",
-  ]);
+  const tournaments = await listExperienceTournaments(
+    ["COMPLETED", "ACTIVE", "CANCELLED"],
+    true
+  );
+  const statistics = await getHubStatistics(session);
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
@@ -23,7 +25,18 @@ const MePage = async () => {
           </Link>
         </div>
       </div>
-      <div>
+      <div className="space-y-4">
+        <div className="grid grid-cols-3 gap-4">
+          <StatisticCard title="Available Credits" value={statistics.credits} />
+          <StatisticCard
+            title="Upcoming Tournaments"
+            value={statistics.upcomingTournaments}
+          />
+          <StatisticCard
+            title="Won Tournaments"
+            value={statistics.wonTournaments}
+          />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {tournaments
             .filter((tournament) =>
