@@ -1,8 +1,9 @@
 import { listTournaments } from "@/actions/tournament";
 import { AdminTournamentTable } from "@/components/admin/tournamentTable";
-import { Button } from "@/components/ui/button";
 
+import { Button } from "@/components/ui/button";
 import { hasAdminAccess } from "@/utils/hasAdminAccess";
+
 import Link from "next/link";
 
 const AdminPage = async () => {

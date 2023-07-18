@@ -1,3 +1,5 @@
+"use client";
+
 import type { ButtonProps } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +20,7 @@ export const TooltipButton = ({
 }: TooltipButtonProps) => {
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <Button {...props}>{children}</Button>
       </TooltipTrigger>
       <TooltipContent>{tip}</TooltipContent>

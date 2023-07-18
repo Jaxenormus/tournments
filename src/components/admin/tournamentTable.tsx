@@ -1,6 +1,5 @@
 "use client";
 
-import { DestructiveButton } from "@/components/destructiveButton";
 import {
   TableHeader,
   TableRow,
@@ -9,14 +8,7 @@ import {
   TableCell,
   Table,
 } from "@/components/ui/table";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
 
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import {
   flexRender,
   type ColumnDef,
@@ -24,19 +16,13 @@ import {
   getCoreRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-
-import { toast } from "sonner";
-
 import type { Tournament, TournamentStatus } from "@prisma/client";
-import { Eye, Medal, Settings, Share2, Trash2 } from "lucide-react";
-import { deleteTournament } from "@/actions/tournament";
 import type { Session } from "next-auth";
-import Link from "next/link";
 import { dayjs } from "@/integrations/dayjs";
-import { TooltipButton } from "@/components/tooltipButton";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
+import { TournamentTableActions } from "@/components/admin/tournamentTableActions";
 
-const columns: ColumnDef<Tournament>[] = [
+const getColumns: (session: Session) => ColumnDef<Tournament>[] = (session) => [
   { accessorKey: "name", header: "Name" },
   { accessorKey: "location", header: "Location" },
   {
@@ -54,6 +40,17 @@ const columns: ColumnDef<Tournament>[] = [
       return dayjs(props.getValue() as Date).format("LLLL zzz");
     },
   },
+  {
+    id: "actions",
+    cell: (props) => {
+      return (
+        <TournamentTableActions
+          tournamentId={props.row.original.id}
+          session={session}
+        />
+      );
+    },
+  },
 ];
 
 interface AdminTournamentTableProps {
@@ -62,129 +59,79 @@ interface AdminTournamentTableProps {
 }
 
 export const AdminTournamentTable = (props: AdminTournamentTableProps) => {
-  const [_, copy] = useCopyToClipboard();
   const table = useReactTable({
     data: props.tournaments,
-    columns,
+    columns: getColumns(props.session),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
   return (
     <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        {...{
-                          className: header.column.getCanSort()
-                            ? "cursor-pointer select-none"
-                            : "",
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: " 🔼",
-                          desc: " 🔽",
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
-                    )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-                <div className="flex p-4 align-middle justify-end">
-                  <TooltipProvider>
-                    <Link href={`/admin/${row.original.id}`}>
-                      <TooltipButton
-                        tip="View"
-                        variant="outline"
-                        className="rounded-r-none"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </TooltipButton>
-                    </Link>
-                    <TooltipButton
-                      tip="Share"
-                      variant="outline"
-                      className="rounded-l-none rounded-r-none border-l-0"
-                      onClick={() => {
-                        copy(`${window.location.host}/hub/${row.original.id}`);
-                        toast.success("Copied to clipboard");
-                      }}
-                    >
-                      <Share2 className="w-4 h-4" />
-                    </TooltipButton>
-                    <Link href={`/admin/${row.original.id}/edit`}>
-                      <TooltipButton
-                        tip="Settings"
-                        variant="outline"
-                        className="rounded-l-none rounded-r-none border-l-0"
-                      >
-                        <Settings className="w-4 h-4" />
-                      </TooltipButton>
-                    </Link>
-                    <Link href={`/admin/${row.original.id}/manage`}>
-                      <TooltipButton
-                        tip="Manage"
-                        variant="outline"
-                        className="rounded-l-none rounded-r-none border-l-0"
-                      >
-                        <Medal className="w-4 h-4" />
-                      </TooltipButton>
-                    </Link>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <DestructiveButton
-                          className="rounded-l-none border-l-0"
-                          handleDelete={async () => {
-                            await deleteTournament(
-                              props.session,
-                              row.original.id
-                            );
-                            toast.success("Tournament deleted");
+      {props.tournaments && (
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? "cursor-pointer select-none"
+                              : "",
+                            onClick: header.column.getToggleSortingHandler(),
                           }}
                         >
-                          <Trash2 className="w-4 h-4" />
-                        </DestructiveButton>
-                      </TooltipTrigger>
-                      <TooltipContent>Delete</TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: " 🔼",
+                            desc: " 🔽",
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </div>
+                      )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <>
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={table.getAllColumns().length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };
