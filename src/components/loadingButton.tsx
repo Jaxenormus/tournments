@@ -1,10 +1,17 @@
 import type { ButtonProps } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import type { MouseEvent } from "react";
 import { useTransition } from "react";
 import { useFormContext } from "react-hook-form";
 
-export const LoadingButton = (props: ButtonProps) => {
+interface CustomButtonProps extends ButtonProps {
+  onClick?: (
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => Promise<void> | void;
+}
+
+export const LoadingButton = (props: CustomButtonProps) => {
   const [isLoading, startTransition] = useTransition();
   return (
     <Button
@@ -13,7 +20,7 @@ export const LoadingButton = (props: ButtonProps) => {
       onClick={(event) => {
         startTransition(async () => {
           // Create an artificial delay to show the loading spinner for at least 800ms (to prevent flashing)
-          if (props.onClick) props.onClick(event);
+          if (props.onClick) await props.onClick(event);
         });
       }}
     >
