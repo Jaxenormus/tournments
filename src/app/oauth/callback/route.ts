@@ -41,8 +41,6 @@ export const GET = async (req: NextRequest) => {
   //   },
   // });
 
-  // console.log(await me.json());
-
   // const { id, username } = (await me.json()) as {
   //   id: string;
   //   username: string;
@@ -59,7 +57,6 @@ export const GET = async (req: NextRequest) => {
   const username = "test";
 
   const url = new URL(redirectUri);
-  url.pathname = `/admin`;
 
   const user = await prisma.user.upsert({
     where: { id },
