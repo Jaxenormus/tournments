@@ -34,27 +34,28 @@ export const GET = async (req: NextRequest) => {
     created_at: number;
   };
 
-  // const me = await fetch("https://api.whop.com/api/v3/info", {
-  //   method: "GET",
-  //   headers: {
-  //     Authorization: `Bearer ${access_token}`,
-  //   },
-  // });
+  const me = await fetch("https://api.whop.com/api/v2/info", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
 
-  // const { id, username } = (await me.json()) as {
-  //   id: string;
-  //   username: string;
-  //   email: string;
-  //   profile_pic_url: string;
-  //   social_accounts: {
-  //     service: string;
-  //     username: string;
-  //     id: string;
-  //   }[];
-  // };
-
-  const id = "user_1psP6ZCZnnKD6";
-  const username = "test";
+  const {
+    user: { id, username },
+  } = (await me.json()) as {
+    user: {
+      id: string;
+      username: string;
+      email: string;
+      profile_pic_url: string;
+      social_accounts: {
+        service: string;
+        username: string;
+        id: string;
+      }[];
+    };
+  };
 
   const url = new URL(redirectUri);
 
