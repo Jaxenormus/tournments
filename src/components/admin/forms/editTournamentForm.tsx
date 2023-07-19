@@ -13,14 +13,15 @@ import type { Tournament } from "@prisma/client";
 
 import { editTournamentSchema } from "@/actions/schema";
 import { editTournament } from "@/actions/tournament";
-import type { Session } from "next-auth";
+
 import { toast } from "sonner";
 import { dayjs } from "@/integrations/dayjs";
 import { minDelay } from "@/utils/minDelay";
+import type { TourneySession } from "@/utils/session";
 
 interface EditTournamentFormProps {
   id: string;
-  session: Session;
+  session: TourneySession;
   tournament: Tournament;
 }
 

@@ -1,12 +1,14 @@
 "use server";
 
-import type { Session } from "next-auth";
+import type { TourneySession } from "@/utils/session";
 import { prisma } from "../../prisma";
 
-export const getHubStatistics = async (session: Session) => {
+export const getHubStatistics = async (session: TourneySession) => {
   const user = await prisma.user.findFirst({
     where: { id: session.user.id },
-    select: { credits: true },
+    select: {
+      credits: { where: { experienceIds: { has: session.experienceId } } },
+    },
   });
   const upcomingTournaments = await prisma.tournament.count({
     where: {
@@ -22,7 +24,7 @@ export const getHubStatistics = async (session: Session) => {
     },
   });
   return {
-    credits: user?.credits ?? 0,
+    credits: user?.credits.length ?? 0,
     upcomingTournaments,
     wonTournaments,
   };

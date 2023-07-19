@@ -6,16 +6,16 @@ import {
 import { JoinTournamentButton } from "@/components/joinTournamentButton";
 import { ParticipantTable } from "@/components/participantsTable";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
-import { getRouteAuthSession } from "@/utils/getRouteAuthSession";
-import { notFound, redirect } from "next/navigation";
+import { hasAccess } from "@/utils/session";
+
+import { notFound } from "next/navigation";
 
 interface TournamentHubPageProps {
   params: { tournamentId: string };
 }
 
 const TournamentHubPage = async (props: TournamentHubPageProps) => {
-  const session = await getRouteAuthSession();
-  if (!session) return redirect("/api/auth/signin");
+  const session = await hasAccess("adminOrConsumer");
   const tournament = await findExperienceTournament(props.params.tournamentId);
   if (!tournament) notFound();
   const participants = await listExperienceTournamentParticipants(

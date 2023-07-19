@@ -8,15 +8,15 @@ import type { z } from "zod";
 import FormSelect from "@/components/ui/form/formSelect";
 import type { manageTournamentSchema } from "@/actions/schema";
 import { manageTournament } from "@/actions/tournament";
-import type { Session } from "next-auth";
 import type { Participant, Tournament } from "@prisma/client";
 import { toast } from "sonner";
 import { minDelay } from "@/utils/minDelay";
 import { LoadingFormButton } from "@/components/loadingButton";
+import type { TourneySession } from "@/utils/session";
 
 interface ManageTournamentFormProps {
   id: string;
-  session: Session;
+  session: TourneySession;
   tournament: Tournament;
   participants: (Participant & { user: { name: string } })[];
 }

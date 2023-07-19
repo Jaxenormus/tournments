@@ -17,12 +17,14 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import type { Tournament, TournamentStatus } from "@prisma/client";
-import type { Session } from "next-auth";
 import { dayjs } from "@/integrations/dayjs";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
 import { TournamentTableActions } from "@/components/admin/tournamentTableActions";
+import type { TourneySession } from "@/utils/session";
 
-const getColumns: (session: Session) => ColumnDef<Tournament>[] = (session) => [
+const getColumns: (session: TourneySession) => ColumnDef<Tournament>[] = (
+  session
+) => [
   { accessorKey: "name", header: "Name" },
   { accessorKey: "location", header: "Location" },
   {
@@ -54,7 +56,7 @@ const getColumns: (session: Session) => ColumnDef<Tournament>[] = (session) => [
 ];
 
 interface AdminTournamentTableProps {
-  session: Session;
+  session: TourneySession;
   tournaments: Tournament[];
 }
 

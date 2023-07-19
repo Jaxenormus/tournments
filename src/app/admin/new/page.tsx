@@ -4,11 +4,11 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
-import { hasAdminAccess } from "@/utils/hasAdminAccess";
+import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 
 const AdminNewPage = async () => {
-  const session = await hasAdminAccess();
+  const session = await hasAccess("admin");
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <Breadcrumb>

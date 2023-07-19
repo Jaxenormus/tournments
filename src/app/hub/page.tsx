@@ -3,13 +3,11 @@ import { getHubStatistics } from "@/actions/user";
 import { ExperienceTournamentCard } from "@/components/experienceTournamentCard";
 import { StatisticCard } from "@/components/statisticCard";
 import { Button } from "@/components/ui/button";
-import { getRouteAuthSession } from "@/utils/getRouteAuthSession";
+import { hasAccess } from "@/utils/session";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 const MePage = async () => {
-  const session = await getRouteAuthSession();
-  if (!session) return redirect("/api/auth/signin");
+  const session = await hasAccess("adminOrConsumer");
   const tournaments = await listExperienceTournaments(
     ["COMPLETED", "ACTIVE", "CANCELLED"],
     true

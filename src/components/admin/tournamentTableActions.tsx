@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/tooltip";
 
 import { getBaseUrl } from "@/utils/getBaseUrl";
+import type { TourneySession } from "@/utils/session";
 
 import { Eye, Share2, Settings, Medal, Trash2 } from "lucide-react";
-import type { Session } from "next-auth";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
 
 interface TournamentTableActionsProps {
-  session: Session;
+  session: TourneySession;
   tournamentId: string;
 }
 

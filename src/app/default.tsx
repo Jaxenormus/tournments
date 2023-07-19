@@ -1,5 +1,7 @@
 import { LoadingScreen } from "@/components/loadingScreen";
 
-export const Default = () => {
+const Default = () => {
   return <LoadingScreen />;
 };
+
+export default Default;

@@ -7,7 +7,7 @@ import {
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { hasAdminAccess } from "@/utils/hasAdminAccess";
+import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -16,7 +16,7 @@ interface TournamentPage {
 }
 
 const TournamentPage = async (props: TournamentPage) => {
-  const session = await hasAdminAccess();
+  const session = await hasAccess("admin");
   const tournament = await findTournament(session, props.params.tournamentId);
   if (!tournament) notFound();
   const participants = await listParticipants(

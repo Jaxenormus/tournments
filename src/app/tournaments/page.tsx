@@ -1,14 +1,11 @@
 import { listExperienceTournaments } from "@/actions/experience";
 import { ExperienceTournamentCard } from "@/components/experienceTournamentCard";
 import { Button } from "@/components/ui/button";
-import { getRouteAuthSession } from "@/utils/getRouteAuthSession";
+import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 
-import { redirect } from "next/navigation";
-
 const ExperienceTournamentsPage = async () => {
-  const session = await getRouteAuthSession();
-  if (!session) return redirect("/api/auth/signin");
+  await hasAccess("adminOrConsumer");
   const upcomingTournaments = await listExperienceTournaments(["ACTIVE"]);
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">

@@ -1,4 +1,4 @@
-import type { Session } from "next-auth";
+import type { TourneySession } from "@/utils/session";
 import { prisma } from "../../prisma";
 import type { TournamentStatus } from "@prisma/client";
 
@@ -43,7 +43,7 @@ export const listExperienceTournamentParticipants = async (id: string) => {
 };
 
 export const listParticipatingExperienceTournaments = async (
-  session: Session
+  session: TourneySession
 ) => {
   const tournaments = await prisma.tournament.findMany({
     where: { participants: { some: { user: { id: session.user.id } } } },
@@ -52,7 +52,7 @@ export const listParticipatingExperienceTournaments = async (
 };
 
 export const joinExperienceTournament = async (
-  session: Session,
+  session: TourneySession,
   id: string
 ) => {
   const tournament = await prisma.tournament.findFirst({
@@ -61,16 +61,17 @@ export const joinExperienceTournament = async (
   if (!tournament) return { error: "Unable to find tournament" };
   const user = await prisma.user.findFirst({
     where: { id: session.user.id },
-    select: { credits: true },
   });
   if (!user) return { error: "Unable to find authenticated user" };
-  if (user.credits < tournament.entryFee)
+  const experienceCredits = await prisma.credit.count({
+    where: { experienceIds: { has: session.experienceId } },
+  });
+  if (experienceCredits < tournament.entryFee)
     return { error: "Insufficient credits" };
   return await prisma.$transaction(async (tx) => {
-    await tx.user.update({
-      where: { id: session.user.id },
-      data: { credits: { decrement: tournament.entryFee } },
-    });
+    await tx.credit.deleteMany({
+      
+    })
     const participant = await tx.participant.create({
       data: {
         id: `${id}-${session.user.id}`,

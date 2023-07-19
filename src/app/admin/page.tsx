@@ -2,12 +2,12 @@ import { listTournaments } from "@/actions/tournament";
 import { AdminTournamentTable } from "@/components/admin/tournamentTable";
 
 import { Button } from "@/components/ui/button";
-import { hasAdminAccess } from "@/utils/hasAdminAccess";
+import { hasAccess } from "@/utils/session";
 
 import Link from "next/link";
 
 const AdminPage = async () => {
-  const session = await hasAdminAccess();
+  const session = await hasAccess("admin");
   const tournaments = await listTournaments(session);
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">

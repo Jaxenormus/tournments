@@ -5,7 +5,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
-import { hasAdminAccess } from "@/utils/hasAdminAccess";
+import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 
 import { notFound } from "next/navigation";
@@ -15,7 +15,7 @@ interface AdminEditPageProps {
 }
 
 const AdminEditPage = async (props: AdminEditPageProps) => {
-  const session = await hasAdminAccess();
+  const session = await hasAccess("admin");
   const tournament = await findTournament(session, props.params.tournamentId);
   if (!tournament) notFound();
   return (

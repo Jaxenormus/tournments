@@ -10,14 +10,14 @@ import { useRouter } from "next/navigation";
 import type { z } from "zod";
 import { createTournamentSchema } from "@/actions/schema";
 
-import type { Session } from "next-auth";
 import dayjs from "dayjs";
 import { minDelay } from "@/utils/minDelay";
 import { createTournament } from "@/actions/tournament";
 import { toast } from "sonner";
+import type { TourneySession } from "@/utils/session";
 
 interface CreateTournamentFormProps {
-  session: Session;
+  session: TourneySession;
 }
 
 export const CreateTournamentForm = (props: CreateTournamentFormProps) => {

@@ -7,13 +7,14 @@ import type {
   editTournamentSchema,
   manageTournamentSchema,
 } from "@/actions/schema";
-import type { Session } from "next-auth";
+
 import { prisma } from "../../prisma";
 import dayjs from "dayjs";
 import { notFound } from "next/navigation";
+import type { TourneySession } from "@/utils/session";
 
 export const createTournament = async (
-  session: Session,
+  session: TourneySession,
   input: z.infer<typeof createTournamentSchema>
 ) => {
   const tournament = await prisma.tournament.create({
@@ -26,9 +27,7 @@ export const createTournament = async (
           where: { id: session.user.id },
           create: {
             id: session.user.id,
-            name: session.user.name ?? session.user.email ?? session.user.id,
-            role: "ADMIN",
-            credits: 0,
+            name: session.user.name ?? session.user.id,
           },
         },
       },
@@ -37,31 +36,31 @@ export const createTournament = async (
   return tournament;
 };
 
-export const findTournament = async (session: Session, id: string) => {
+export const findTournament = async (session: TourneySession, id: string) => {
   const tournament = await prisma.tournament.findFirst({
-    where: { id, user: { id: session.user.id, role: "ADMIN" } },
+    where: { id, user: { id: session.user.id } },
   });
   return tournament;
 };
 
-export const listTournaments = async (session: Session) => {
+export const listTournaments = async (session: TourneySession) => {
   const tournaments = await prisma.tournament.findMany({
-    where: { user: { id: session.user.id, role: "ADMIN" } },
+    where: { user: { id: session.user.id } },
   });
   return tournaments;
 };
 
 export const editTournament = async (
-  session: Session,
+  session: TourneySession,
   id: string,
   input: z.infer<typeof editTournamentSchema>
 ) => {
   const oldTournament = await prisma.tournament.findFirst({
-    where: { id, user: { id: session.user.id, role: "ADMIN" } },
+    where: { id, user: { id: session.user.id } },
   });
   if (!oldTournament) notFound();
   const tournament = await prisma.tournament.update({
-    where: { id: id, user: { id: session.user.id, role: "ADMIN" } },
+    where: { id: id, user: { id: session.user.id } },
     data: {
       ...input,
       date: dayjs(input.date).toDate(),
@@ -71,12 +70,12 @@ export const editTournament = async (
 };
 
 export const manageTournament = async (
-  session: Session,
+  session: TourneySession,
   id: string,
   input: z.infer<typeof manageTournamentSchema>
 ) => {
   const tournament = await prisma.tournament.update({
-    where: { id: id, user: { id: session.user.id, role: "ADMIN" } },
+    where: { id: id, user: { id: session.user.id } },
     data: {
       ...(input.winner ? { status: "COMPLETED" } : {}),
       winner: {
@@ -89,19 +88,19 @@ export const manageTournament = async (
   return tournament;
 };
 
-export const deleteTournament = async (session: Session, id: string) => {
+export const deleteTournament = async (session: TourneySession, id: string) => {
   const tournament = await prisma.tournament.delete({
-    where: { id: id, user: { id: session.user.id, role: "ADMIN" } },
+    where: { id: id, user: { id: session.user.id } },
   });
   return tournament;
 };
 
-export const listParticipants = async (session: Session, id: string) => {
+export const listParticipants = async (session: TourneySession, id: string) => {
   const tournament = await prisma.participant.findMany({
     where: {
       tournament: {
         OR: [
-          { user: { id: session.user.id, role: "ADMIN" } },
+          { user: { id: session.user.id } },
           { participants: { some: { user: { id: session.user.id } } } },
         ],
         id: id,
