@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest) => {
     created_at: number;
   };
 
-  const me = await fetch("https://api.whop.com/api/v2/info", {
+  const me = await fetch("https://api.whop.com/api/v2/oauth/info", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${access_token}`,
