@@ -16,7 +16,7 @@ export const isExperienceOwner = async (
 ) => {
   try {
     const res = await fetch(
-      `https://staging.whop.com/api/v2/me/has_access/${experienceId}`,
+      `${process.env.WHOP_API_URL}/api/v2/me/has_access/${experienceId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -34,6 +34,7 @@ export const isExperienceOwner = async (
 export interface TourneySession {
   user: { id: string; name: string };
   experienceId: string;
+  accessToken: string;
 }
 
 export const hasAccess = async (
@@ -75,5 +76,6 @@ export const hasAccess = async (
   return {
     user: { id: userId.value, name: user.name },
     experienceId: experienceId.value,
+    accessToken: accessToken.value,
   };
 };

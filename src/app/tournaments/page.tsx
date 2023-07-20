@@ -1,4 +1,7 @@
-import { listExperienceTournaments } from "@/actions/experience";
+import {
+  fetchWhopExperienceDetails,
+  listExperienceTournaments,
+} from "@/actions/experience";
 import { ExperienceTournamentCard } from "@/components/experienceTournamentCard";
 import { Button } from "@/components/ui/button";
 import { hasAccess } from "@/utils/session";
@@ -6,6 +9,7 @@ import Link from "next/link";
 
 const ExperienceTournamentsPage = async () => {
   const session = await hasAccess("adminOrConsumer");
+  const experienceData = await fetchWhopExperienceDetails(session);
   const upcomingTournaments = await listExperienceTournaments(session, [
     "ACTIVE",
   ]);
@@ -13,7 +17,7 @@ const ExperienceTournamentsPage = async () => {
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">
-          Random Experience Tournaments
+          {experienceData.name}
         </h2>
         <div className="flex items-center space-x-2">
           <Link href="/hub">

@@ -99,3 +99,24 @@ export const joinExperienceTournament = async (
   tournamentRevalidation();
   return data;
 };
+
+export const fetchWhopExperienceDetails = async (session: TourneySession) => {
+  const res = await fetch(
+    `${process.env.WHOP_API_URL}/api/v2/experiences/${session.experienceId}`,
+    { headers: { Authorization: `Bearer ${session.accessToken}` } }
+  );
+
+  const experienceData = (await res.json()) as {
+    id: string;
+    experience_type: string;
+    name: string;
+    description: string;
+    properties: unknown;
+    products: string;
+    access_passes: string;
+  };
+
+  console.log(experienceData);
+
+  return experienceData;
+};
