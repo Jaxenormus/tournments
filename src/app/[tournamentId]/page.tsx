@@ -6,7 +6,13 @@ import {
 import { JoinTournamentButton } from "@/components/joinTournamentButton";
 import { ParticipantTable } from "@/components/participantsTable";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from "@/components/ui/breadcrumb";
 import { hasAccess } from "@/utils/session";
+import Link from "next/link";
 
 import { notFound } from "next/navigation";
 
@@ -26,6 +32,18 @@ const TournamentHubPage = async (props: TournamentHubPageProps) => {
   );
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink as={Link} href="/hub">
+            Hub
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbLink as={Link} href={`/${tournament.id}`} isCurrentPage>
+            {tournament.name}
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">
           Join {tournament.name}
