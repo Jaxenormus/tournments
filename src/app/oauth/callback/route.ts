@@ -11,6 +11,18 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
+  console.log(code, redirectUri, experienceId);
+
+  console.log(
+    JSON.stringify({
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: redirectUri,
+      client_id: process.env.WHOP_CLIENT_ID,
+      client_secret: process.env.WHOP_CLIENT_SECRET,
+    })
+  );
+
   const oauth = await fetch("https://staging.whop.com/api/v3/oauth/token", {
     method: "POST",
     headers: {
