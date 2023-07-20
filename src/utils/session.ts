@@ -2,30 +2,22 @@ import { cookies } from "next/dist/client/components/headers";
 import { prisma } from "../../prisma";
 import { redirect } from "next/navigation";
 
-interface HasAccessResponse {
-  valid: true;
-  authorized_user?: {
-    role: "owner" | "admin" | "moderator";
-    permission_level: 0 | 1 | 2;
-  };
-}
-
-export const isExperienceOwner = async (
-  accessToken: string,
-  experienceId: string
-) => {
+export const isExperienceOwner = async (accessToken: string) => {
   try {
-    const res = await fetch(
-      `${process.env.WHOP_API_URL}/api/v2/me/has_access/${experienceId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    const data = (await res.json()) as HasAccessResponse;
+    const res = await fetch(`${process.env.WHOP_API_URL}/api/v2/oauth/info`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const data = (await res.json()) as {
+      user: {
+        authorized_user: {
+          role: "owner" | "admin" | "moderator";
+        };
+      };
+    };
     console.log(data);
-    return data.authorized_user?.permission_level === 0;
+    return data.user.authorized_user.role === "owner";
   } catch (e) {
     return false;
   }
@@ -63,7 +55,7 @@ export const hasAccess = async (
     );
   }
   if (access === "admin" || access === "adminOrConsumer") {
-    isAdmin = await isExperienceOwner(accessToken.value, experienceId.value);
+    isAdmin = await isExperienceOwner(accessToken.value);
   }
   console.log(isAdmin, hasMembership);
   if (
