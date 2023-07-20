@@ -162,24 +162,31 @@ export const listWhopExperiences = async (
     { headers: { Authorization: `Bearer ${session.accessToken}` } }
   );
 
-  const data = (await res.json()) as {
-    pagination: {
-      current_page: number;
-      total_page: number;
-      total_count: number;
-    };
-    data: [
-      {
-        id: string;
-        experience_type: string;
-        name: string;
-        description: string;
-        properties: unknown;
-        products: string;
-        access_passes: string;
+  const data = (await res.json()) as
+    | {
+        pagination: {
+          current_page: number;
+          total_page: number;
+          total_count: number;
+        };
+        data: [
+          {
+            id: string;
+            experience_type: string;
+            name: string;
+            description: string;
+            properties: unknown;
+            products: string;
+            access_passes: string;
+          }
+        ];
       }
-    ];
-  };
+    | { error: { status: number; message: string } };
+
+  if ("error" in data) {
+    console.error(data.error);
+    return [];
+  }
 
   const experiences = data.data.map((experience) => ({
     id: experience.id,
