@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import type { z } from "zod";
 import { createTournamentSchema } from "@/actions/schema";
 
-import dayjs from "dayjs";
+import {dayjs} from "@/integrations/dayjs";
 import { minDelay } from "@/utils/minDelay";
 import { createTournament } from "@/actions/admin";
 import { toast } from "sonner";
@@ -18,6 +18,7 @@ import type { TourneySession } from "@/utils/session";
 
 interface CreateTournamentFormProps {
   session: TourneySession;
+  experiences: { id: string; name: string }[];
 }
 
 export const CreateTournamentForm = (props: CreateTournamentFormProps) => {
@@ -40,7 +41,7 @@ export const CreateTournamentForm = (props: CreateTournamentFormProps) => {
           router.push(`/admin/${tournament.id}`);
         })}
       >
-        <TournamentForm type="create" />
+        <TournamentForm type="create" experiences={props.experiences} />
       </form>
     </Form>
   );

@@ -6,6 +6,7 @@ import { ExperienceTournamentCard } from "@/components/user/experienceTournament
 import { Button } from "@/components/ui/button/button";
 import { hasAccess } from "@/utils/session";
 import Link from "next/link";
+import { HubStatistics } from "@/components/user/hubStatistics";
 
 const ExperienceTournamentsPage = async () => {
   const session = await hasAccess("adminOrConsumer");
@@ -23,14 +24,20 @@ const ExperienceTournamentsPage = async () => {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {upcomingTournaments.map((tournament) => (
-          <ExperienceTournamentCard
-            key={tournament.id}
-            tournament={tournament}
-            fromTournamentsPage
-          />
-        ))}
+      <HubStatistics session={session} />
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold tracking-tight">
+          Upcoming Tournaments
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {upcomingTournaments.map((tournament) => (
+            <ExperienceTournamentCard
+              key={tournament.id}
+              tournament={tournament}
+              fromTournamentsPage
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

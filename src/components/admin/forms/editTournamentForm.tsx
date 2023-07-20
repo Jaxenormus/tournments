@@ -23,6 +23,7 @@ interface EditTournamentFormProps {
   id: string;
   session: TourneySession;
   tournament: Tournament;
+  experiences: { id: string; name: string }[];
 }
 
 export const EditTournamentForm = (props: EditTournamentFormProps) => {
@@ -48,7 +49,7 @@ export const EditTournamentForm = (props: EditTournamentFormProps) => {
           router.push(`/admin/${tournament.id}`);
         })}
       >
-        <TournamentForm type="edit" />
+        <TournamentForm type="edit" experiences={props.experiences} />
       </form>
     </Form>
   );

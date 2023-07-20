@@ -3,6 +3,7 @@
 import FormInput from "@/components/ui/form/formInput";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,9 +21,12 @@ import { useFormContext } from "react-hook-form";
 import type { z } from "zod";
 import type { editTournamentSchema } from "@/actions/schema";
 import { LoadingFormButton } from "@/components/ui/button/loading";
+import { Label } from "@/components/ui/form/core/label";
+import ReactSelect from "react-select";
 
 interface TournamentFormProps {
   type: "create" | "edit";
+  experiences: { id: string; name: string }[];
 }
 
 export const TournamentForm = (props: TournamentFormProps) => {
@@ -31,16 +35,10 @@ export const TournamentForm = (props: TournamentFormProps) => {
     <div className="space-y-5">
       <FormInput
         control={form.control}
-        name="name"
-        label="Name"
-        placeholder="Spikeball Tournament"
-      />
-      <FormInput
-        control={form.control}
-        type="textarea"
+        type="input"
         name="description"
         label="Description"
-        placeholder="Participate in the most competitive spikeball tournament in the world!"
+        placeholder="4 teams of two"
       />
       <FormInput
         control={form.control}
@@ -52,6 +50,35 @@ export const TournamentForm = (props: TournamentFormProps) => {
           form.setValue("entryFee", parseInt(e.target.value, 10))
         }
       />
+      <div className="space-y-2">
+        <div>
+          <Label>Allowed Experiences</Label>
+          <FormDescription>
+            Select experiences that are allowed to participate in this
+            tournament by purchasing access. Please note that 1 purchase is 1
+            tournament booking
+          </FormDescription>
+        </div>
+        <ReactSelect
+          value={form.watch("experienceIds").map((eid) => ({
+            label:
+              props.experiences.find((experience) => experience.id === eid)
+                ?.name ?? "Unknown",
+            value: eid,
+          }))}
+          options={props.experiences.map((experience) => ({
+            label: experience.name,
+            value: experience.id,
+          }))}
+          isMulti
+          onChange={(values) => {
+            form.setValue(
+              "experienceIds",
+              values?.map((value) => value.value)
+            );
+          }}
+        />
+      </div>
       <FormInput
         control={form.control}
         name="prize"

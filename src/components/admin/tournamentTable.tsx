@@ -25,8 +25,6 @@ import type { TourneySession } from "@/utils/session";
 const getColumns: (session: TourneySession) => ColumnDef<Tournament>[] = (
   session
 ) => [
-  { accessorKey: "name", header: "Name" },
-  { accessorKey: "location", header: "Location" },
   {
     accessorKey: "status",
     header: "Status",
@@ -35,6 +33,7 @@ const getColumns: (session: TourneySession) => ColumnDef<Tournament>[] = (
       return <TournamentStatusBadge status={status} />;
     },
   },
+  { accessorKey: "location", header: "Location" },
   {
     accessorKey: "createdAt",
     header: "Date",

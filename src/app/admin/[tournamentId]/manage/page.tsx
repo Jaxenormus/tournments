@@ -5,6 +5,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
+import { getTournamentTitle } from "@/utils/getTournamentTitle";
 import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 
@@ -32,7 +33,7 @@ const AdminManagePage = async (props: AdminManagePageProps) => {
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href={`/admin/${tournament.id}`}>
-            {tournament.name}
+          {getTournamentTitle(tournament)}
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>

@@ -1,6 +1,7 @@
 import { TournamentStatusBadge } from "@/components/common/tournamentStatusBadge";
 import { Button } from "@/components/ui/button/button";
 import { dayjs } from "@/integrations/dayjs";
+import { getTournamentTitle } from "@/utils/getTournamentTitle";
 import type { Tournament } from "@prisma/client";
 import Link from "next/link";
 
@@ -17,7 +18,7 @@ export const ExperienceTournamentCard = (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <h4 className="text-xl font-semibold tracking-tight">
-            {props.tournament.name}
+            {getTournamentTitle(props.tournament, 12)}
           </h4>
           <TournamentStatusBadge status={props.tournament.status} />
         </div>

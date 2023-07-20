@@ -15,6 +15,7 @@ import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 
 import { notFound } from "next/navigation";
+import { getTournamentTitle } from "@/utils/getTournamentTitle";
 
 interface TournamentHubPageProps {
   params: { tournamentId: string };
@@ -49,13 +50,13 @@ const TournamentHubPage = async (props: TournamentHubPageProps) => {
         )}
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href={`/${tournament.id}`} isCurrentPage>
-            {tournament.name}
+            {getTournamentTitle(tournament)}
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">
-          Join {tournament.name}
+          {getTournamentTitle(tournament)}
         </h2>
         <div className="flex items-center space-x-2">
           <JoinTournamentButton

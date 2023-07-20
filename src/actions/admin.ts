@@ -36,10 +36,15 @@ export const createTournament = async (
       },
     },
   });
-  await inngest.send({
-    name: "tournament/date.set",
-    data: { id: tournament.id, isoDate: dayjs(tournament.date).toISOString() },
-  });
+  if (process.env.NODE_ENV === "production") {
+    await inngest.send({
+      name: "tournament/date.set",
+      data: {
+        id: tournament.id,
+        isoDate: dayjs(tournament.date).toISOString(),
+      },
+    });
+  }
   tournamentRevalidation();
   return tournament;
 };
@@ -71,14 +76,19 @@ export const editTournament = async (
     where: { id: id, user: { id: session.user.id } },
     data: { ...input, date: dayjs(input.date).utc().toISOString() },
   });
-  await inngest.send({
-    name: "tournament/update",
-    data: { id: tournament.id },
-  });
-  await inngest.send({
-    name: "tournament/date.set",
-    data: { id: tournament.id, isoDate: dayjs(tournament.date).toISOString() },
-  });
+  if (process.env.NODE_ENV === "production") {
+    await inngest.send({
+      name: "tournament/update",
+      data: { id: tournament.id },
+    });
+    await inngest.send({
+      name: "tournament/date.set",
+      data: {
+        id: tournament.id,
+        isoDate: dayjs(tournament.date).toISOString(),
+      },
+    });
+  }
   tournamentRevalidation();
   return tournament;
 };
@@ -99,10 +109,12 @@ export const manageTournament = async (
       },
     },
   });
-  await inngest.send({
-    name: "tournament/update",
-    data: { id: tournament.id },
-  });
+  if (process.env.NODE_ENV === "production") {
+    await inngest.send({
+      name: "tournament/update",
+      data: { id: tournament.id },
+    });
+  }
   tournamentRevalidation();
   return tournament;
 };
@@ -139,4 +151,47 @@ export const listParticipants = async (session: TourneySession, id: string) => {
     ...participant,
     isWinner: winner?.winner?.id === participant.user.id,
   }));
+};
+
+export const listWhopExperiences = async (
+  session: TourneySession,
+  page = 1
+): Promise<{ id: string; name: string; description: string }[]> => {
+  const res = await fetch(
+    `${process.env.WHOP_API_URL}/api/v2/oauth/company/experiences?page=${page}`,
+    { headers: { Authorization: `Bearer ${session.accessToken}` } }
+  );
+
+  const data = (await res.json()) as {
+    pagination: {
+      current_page: number;
+      total_page: number;
+      total_count: number;
+    };
+    data: [
+      {
+        id: string;
+        experience_type: string;
+        name: string;
+        description: string;
+        properties: unknown;
+        products: string;
+        access_passes: string;
+      }
+    ];
+  };
+
+  const experiences = data.data.map((experience) => ({
+    id: experience.id,
+    name: experience.name,
+    description: experience.description,
+  }));
+
+  if (data.pagination.current_page < data.pagination.total_page) {
+    return experiences.concat(
+      await listWhopExperiences(session, data.pagination.current_page + 1)
+    );
+  }
+
+  return experiences;
 };
