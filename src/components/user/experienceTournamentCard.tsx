@@ -14,7 +14,7 @@ export const ExperienceTournamentCard = (
   props: ExperienceTournamentCardProps
 ) => {
   return (
-    <div className="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-4">
+    <div className="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-2 flex flex-col justify-between">
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <h4 className="text-xl font-semibold tracking-tight truncate">
@@ -23,6 +23,8 @@ export const ExperienceTournamentCard = (
           <TournamentStatusBadge status={props.tournament.status} />
         </div>
         <p className="text-gray-500">{props.tournament.description}</p>
+      </div>
+      <div className="space-y-4">
         <div className="space-y-1">
           <p className="text-gray-500 text-sm">
             Prize: {props.tournament.prize}
@@ -34,18 +36,18 @@ export const ExperienceTournamentCard = (
             Date: {dayjs(props.tournament.date).format("LLLL z")}
           </p>
         </div>
-      </div>
-      <div className="flex items-center justify-between space-x-2">
-        <Link
-          href={
-            props.fromTournamentsPage
-              ? `/${props.tournament.id}?fromTournamentsPage=true`
-              : `/${props.tournament.id}`
-          }
-          className="w-full"
-        >
-          <Button className="w-full">View Details</Button>
-        </Link>
+        <div className="flex items-center justify-between space-x-2">
+          <Link
+            href={
+              props.fromTournamentsPage
+                ? `/${props.tournament.id}?fromTournamentsPage=true`
+                : `/${props.tournament.id}`
+            }
+            className="w-full"
+          >
+            <Button className="w-full">View Details</Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
