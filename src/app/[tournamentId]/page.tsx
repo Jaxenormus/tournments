@@ -18,9 +18,11 @@ import { notFound } from "next/navigation";
 
 interface TournamentHubPageProps {
   params: { tournamentId: string };
+  searchParams: { fromTournamentsPage?: string };
 }
 
 const TournamentHubPage = async (props: TournamentHubPageProps) => {
+  const returnToTournaments = props.searchParams.fromTournamentsPage === "true";
   const session = await hasAccess("adminOrConsumer");
   const tournament = await findExperienceTournament(
     session,
@@ -38,6 +40,13 @@ const TournamentHubPage = async (props: TournamentHubPageProps) => {
             Hub
           </BreadcrumbLink>
         </BreadcrumbItem>
+        {returnToTournaments && (
+          <BreadcrumbItem>
+            <BreadcrumbLink as={Link} href="/tournaments">
+              Tournaments
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        )}
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href={`/${tournament.id}`} isCurrentPage>
             {tournament.name}

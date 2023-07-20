@@ -6,6 +6,7 @@ import Link from "next/link";
 
 interface ExperienceTournamentCardProps {
   tournament: Tournament & { participants: { id: string }[] };
+  fromTournamentsPage: boolean;
 }
 
 export const ExperienceTournamentCard = (
@@ -34,7 +35,14 @@ export const ExperienceTournamentCard = (
         </div>
       </div>
       <div className="flex items-center justify-between space-x-2">
-        <Link href={`/${props.tournament.id}`} className="w-full">
+        <Link
+          href={
+            props.fromTournamentsPage
+              ? `/${props.tournament.id}?fromTournamentsPage=true`
+              : `/${props.tournament.id}`
+          }
+          className="w-full"
+        >
           <Button className="w-full">View Details</Button>
         </Link>
       </div>

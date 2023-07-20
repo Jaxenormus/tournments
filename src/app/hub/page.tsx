@@ -51,6 +51,7 @@ const MePage = async () => {
                 <ExperienceTournamentCard
                   key={tournament.id}
                   tournament={tournament}
+                  fromTournamentsPage={false}
                 />
               ))}
           </div>

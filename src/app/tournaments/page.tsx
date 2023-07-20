@@ -28,6 +28,7 @@ const ExperienceTournamentsPage = async () => {
           <ExperienceTournamentCard
             key={tournament.id}
             tournament={tournament}
+            fromTournamentsPage
           />
         ))}
       </div>
