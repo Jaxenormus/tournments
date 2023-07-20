@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const oauth = await fetch("https://data.whop.com/api/v3/oauth/token", {
+  const oauth = await fetch("https://staging.whop.com/api/v3/oauth/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest) => {
     created_at: number;
   };
 
-  const me = await fetch("https://api.whop.com/api/v2/oauth/info", {
+  const me = await fetch("https://staging.whop.com/api/v2/oauth/info", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${access_token}`,
