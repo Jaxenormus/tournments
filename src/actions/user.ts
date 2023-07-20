@@ -76,17 +76,12 @@ export const joinExperienceTournament = async (
     where: { id: session.user.id },
   });
   if (!user) return { error: "Unable to find authenticated user" };
-  const experienceCredits = await prisma.credit.findMany({
+  const credit = await prisma.credit.findFirst({
     where: { experienceIds: { has: session.experienceId } },
   });
-  if (experienceCredits.length < tournament.entryFee)
-    return { error: "Insufficient credits" };
+  if (!credit) return { error: "Insufficient credits" };
   const data = await prisma.$transaction(async (tx) => {
-    const experienceCreditIds = experienceCredits.map((credit) => credit.id);
-    for (let i = 0; i < tournament.entryFee; i++) {
-      await tx.credit.delete({ where: { id: experienceCreditIds[i] } });
-      experienceCreditIds.splice(i, 1);
-    }
+    await tx.credit.delete({ where: { id: credit.id } });
     const participant = await tx.participant.create({
       data: {
         id: `${id}-${session.user.id}`,

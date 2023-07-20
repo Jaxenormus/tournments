@@ -39,16 +39,6 @@ export const TournamentForm = (props: TournamentFormProps) => {
         label="Description"
         placeholder="4 teams of two"
       />
-      <FormInput
-        control={form.control}
-        type="number"
-        name="entryFee"
-        label="Entry Fee (in Whop Credits)"
-        placeholder="10"
-        onChange={(e) =>
-          form.setValue("entryFee", parseInt(e.target.value, 10))
-        }
-      />
       <FormField
         control={form.control}
         name="experienceIds"

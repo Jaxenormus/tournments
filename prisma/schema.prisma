@@ -52,7 +52,6 @@ model Tournament {
   description   String
   date          DateTime
   experienceIds String[]
-  entryFee      Int
   prize         String
   location      String
   winner        User?            @relation("Winner", fields: [winnerId], references: [id])

@@ -72,10 +72,6 @@ const TournamentPage = async (props: TournamentPage) => {
         />
         <TournamentDetailListItem name="Prize" value={tournament.prize} />
         <TournamentDetailListItem name="Location" value={tournament.location} />
-        <TournamentDetailListItem
-          name="Entry Fee"
-          value={`${tournament.entryFee} Credits`}
-        />
       </dl>
       <ParticipantTable
         tournamentStatus={tournament.status}

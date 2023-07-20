@@ -39,11 +39,7 @@ export const JoinTournamentButton = (props: JoinTournamentButtonProps) => {
         }
       }}
     >
-      {props.hasJoined ? (
-        "Joined"
-      ) : (
-        <> Join for {props.tournament.entryFee} credits</>
-      )}
+      {props.hasJoined ? "Joined" : "Join Tournament"}
     </LoadingButton>
   );
 };
