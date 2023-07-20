@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { notFound } from "next/navigation";
 import type { TourneySession } from "@/utils/session";
 import { tournamentRevalidation } from "@/actions";
+import { inngest } from "@/inngest/client";
 
 export const createTournament = async (
   session: TourneySession,
@@ -34,6 +35,10 @@ export const createTournament = async (
         },
       },
     },
+  });
+  await inngest.send({
+    name: "tournament/date.set",
+    data: { id: tournament.id, date: tournament.date },
   });
   tournamentRevalidation();
   return tournament;
@@ -69,6 +74,14 @@ export const editTournament = async (
       date: dayjs(input.date).toDate(),
     },
   });
+  await inngest.send({
+    name: "tournament/update",
+    data: { id: tournament.id },
+  });
+  await inngest.send({
+    name: "tournament/date.set",
+    data: { id: tournament.id, date: tournament.date },
+  });
   tournamentRevalidation();
   return tournament;
 };
@@ -89,6 +102,10 @@ export const manageTournament = async (
       },
     },
   });
+  await inngest.send({
+    name: "tournament/update",
+    data: { id: tournament.id },
+  });
   tournamentRevalidation();
   return tournament;
 };
@@ -96,6 +113,10 @@ export const manageTournament = async (
 export const deleteTournament = async (session: TourneySession, id: string) => {
   const tournament = await prisma.tournament.delete({
     where: { id: id, user: { id: session.user.id } },
+  });
+  await inngest.send({
+    name: "tournament/delete",
+    data: { id: tournament.id },
   });
   return tournament;
 };
