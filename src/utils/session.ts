@@ -25,7 +25,9 @@ export const isExperienceOwner = async (accessToken: string) => {
       return false;
     }
 
-    return data.user.authorized_user.role === "owner";
+    return ["owner", "admin", "moderator"].includes(
+      data.user.authorized_user.role
+    );
   } catch (e) {
     return false;
   }
