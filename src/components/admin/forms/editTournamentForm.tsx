@@ -39,7 +39,10 @@ export const EditTournamentForm = (props: EditTournamentFormProps) => {
       <form
         onSubmit={form.handleSubmit(async (values) => {
           const tournament = await minDelay(async () => {
-            return await editTournament(props.session, props.id, values);
+            return await editTournament(props.session, props.id, {
+              ...values,
+              date: dayjs.tz(values.date, dayjs.tz.guess()).toISOString(),
+            });
           }, 800);
           toast.success("Tournament has been updated");
           router.push(`/admin/${tournament.id}`);

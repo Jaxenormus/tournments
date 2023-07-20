@@ -2,7 +2,7 @@ import { EventSchemas, Inngest } from "inngest";
 
 type Events = {
   "tournament/date.set": {
-    data: { id: string; date: Date };
+    data: { id: string; isoDate:string };
   };
   "tournament/update": {
     data: { id: string };

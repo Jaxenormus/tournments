@@ -1,10 +1,9 @@
 import { prisma } from "../../prisma";
 import { inngest } from "./client";
-import dayjs from "dayjs";
 
-export const handleTournamentCompletion = inngest.createFunction(
+export const handleScheduleTournamentCompletion = inngest.createFunction(
   {
-    name: "Handle Tournament Completion",
+    name: "Schedule tournament completion",
     cancelOn: [
       { event: "tournament/update", match: "data.id" },
       { event: "tournament/delete", match: "data.id" },
@@ -12,11 +11,12 @@ export const handleTournamentCompletion = inngest.createFunction(
   },
   { event: "tournament/date.set" },
   async ({ event, step }) => {
-    await step.sleepUntil(dayjs(event.data.date).toDate());
-    const newTournament = await prisma.tournament.update({
-      where: { id: event.data.id },
-      data: { status: "COMPLETED" },
+    await step.sleepUntil(event.data.isoDate);
+    return await step.run("Update tournament status", async () => {
+      return await prisma.tournament.update({
+        where: { id: event.data.id },
+        data: { status: "COMPLETED" },
+      });
     });
-    return newTournament;
   }
 );

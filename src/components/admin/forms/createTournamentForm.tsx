@@ -31,7 +31,10 @@ export const CreateTournamentForm = (props: CreateTournamentFormProps) => {
       <form
         onSubmit={form.handleSubmit(async (values) => {
           const tournament = await minDelay(async () => {
-            return await createTournament(props.session, values);
+            return await createTournament(props.session, {
+              ...values,
+              date: dayjs.tz(values.date, dayjs.tz.guess()).toISOString(),
+            });
           }, 800);
           toast.success("Tournament has been created");
           router.push(`/admin/${tournament.id}`);

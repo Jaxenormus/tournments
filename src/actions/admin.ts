@@ -9,7 +9,7 @@ import type {
 } from "@/actions/schema";
 
 import { prisma } from "../../prisma";
-import dayjs from "dayjs";
+import { dayjs } from "@/integrations/dayjs";
 import { notFound } from "next/navigation";
 import type { TourneySession } from "@/utils/session";
 import { tournamentRevalidation } from "@/actions";
@@ -22,7 +22,7 @@ export const createTournament = async (
   const tournament = await prisma.tournament.create({
     data: {
       ...input,
-      date: dayjs(input.date).toDate(),
+      date: dayjs(input.date).utc().toISOString(),
       status: "ACTIVE",
       experienceIds: [session.experienceId],
       user: {
@@ -38,7 +38,7 @@ export const createTournament = async (
   });
   await inngest.send({
     name: "tournament/date.set",
-    data: { id: tournament.id, date: tournament.date },
+    data: { id: tournament.id, isoDate: dayjs(tournament.date).toISOString() },
   });
   tournamentRevalidation();
   return tournament;
@@ -69,10 +69,7 @@ export const editTournament = async (
   if (!oldTournament) notFound();
   const tournament = await prisma.tournament.update({
     where: { id: id, user: { id: session.user.id } },
-    data: {
-      ...input,
-      date: dayjs(input.date).toDate(),
-    },
+    data: { ...input, date: dayjs(input.date).utc().toISOString() },
   });
   await inngest.send({
     name: "tournament/update",
@@ -80,7 +77,7 @@ export const editTournament = async (
   });
   await inngest.send({
     name: "tournament/date.set",
-    data: { id: tournament.id, date: tournament.date },
+    data: { id: tournament.id, isoDate: dayjs(tournament.date).toISOString() },
   });
   tournamentRevalidation();
   return tournament;
