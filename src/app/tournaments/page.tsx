@@ -14,9 +14,11 @@ const ExperienceTournamentsPage = async () => {
     "ACTIVE",
   ]);
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
-      <Header title={name} href="/hub" ctaText="View My Tournaments" />
-      <HubStatistics session={session} />
+    <div className="flex-1 space-y-8 p-8 pt-6">
+      <div className="space-y-4">
+        <Header title={name} href="/hub" ctaText="View My Tournaments" />
+        <HubStatistics session={session} />
+      </div>
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">
           Upcoming Tournaments
