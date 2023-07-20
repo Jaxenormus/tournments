@@ -1,5 +1,6 @@
 import { listWhopExperiences } from "@/actions/admin";
 import { CreateTournamentForm } from "@/components/admin/forms/createTournamentForm";
+import { Header } from "@/components/common/header";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -25,9 +26,7 @@ const AdminNewPage = async () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Create Tournament</h2>
-      </div>
+      <Header title="Create Tournament" />
       <CreateTournamentForm session={session} experiences={experiences} />
     </div>
   );

@@ -4,6 +4,7 @@ import {
   listWhopExperiences,
 } from "@/actions/admin";
 import { TournamentDetailListItem } from "@/components/admin/tournamentDetailListItem";
+import { Header } from "@/components/common/header";
 import { ParticipantTable } from "@/components/common/participantsTable";
 import { TournamentStatusBadge } from "@/components/common/tournamentStatusBadge";
 import {
@@ -11,7 +12,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button/button";
 import { dayjs } from "@/integrations/dayjs";
 
 import { getTournamentTitle } from "@/utils/getTournamentTitle";
@@ -47,16 +47,11 @@ const TournamentPage = async (props: TournamentPage) => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <div className="flex justify-between space-y-2 items-end">
-        <h2 className="text-3xl font-bold tracking-tight">
-          {getTournamentTitle(tournament)}
-        </h2>
-        <div className="flex items-center space-x-2">
-          <Link href={`/admin/${tournament.id}/edit`}>
-            <Button>Edit</Button>
-          </Link>
-        </div>
-      </div>
+      <Header
+        title={getTournamentTitle(tournament)}
+        href={`/admin/${tournament.id}/edit`}
+        ctaText="Edit"
+      />
       <TournamentStatusBadge status={tournament.status} isAdmin />
       <dl className="bg-gray-100 border border-gray-200 rounded-md p-4 space-y-2">
         <TournamentDetailListItem

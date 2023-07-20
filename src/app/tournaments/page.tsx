@@ -3,10 +3,9 @@ import {
   listExperienceTournaments,
 } from "@/actions/user";
 import { ExperienceTournamentCard } from "@/components/user/experienceTournamentCard";
-import { Button } from "@/components/ui/button/button";
 import { hasAccess } from "@/utils/session";
-import Link from "next/link";
 import { HubStatistics } from "@/components/user/hubStatistics";
+import { Header } from "@/components/common/header";
 
 const ExperienceTournamentsPage = async () => {
   const session = await hasAccess("adminOrConsumer");
@@ -16,14 +15,7 @@ const ExperienceTournamentsPage = async () => {
   ]);
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">{name}</h2>
-        <div className="flex items-center space-x-2">
-          <Link href="/hub">
-            <Button>View My Tournaments</Button>
-          </Link>
-        </div>
-      </div>
+      <Header title={name} href="/hub" ctaText="View My Tournaments" />
       <HubStatistics session={session} />
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">

@@ -1,5 +1,6 @@
 import { findTournament, listParticipants } from "@/actions/admin";
 import { ManageTournamentForm } from "@/components/admin/forms/manageTournamentForm";
+import { Header } from "@/components/common/header";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -33,7 +34,7 @@ const AdminManagePage = async (props: AdminManagePageProps) => {
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href={`/admin/${tournament.id}`}>
-          {getTournamentTitle(tournament)}
+            {getTournamentTitle(tournament)}
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
@@ -46,9 +47,7 @@ const AdminManagePage = async (props: AdminManagePageProps) => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Manage Tournament</h2>
-      </div>
+      <Header title="Manage Tournament" />
       <ManageTournamentForm
         id={props.params.tournamentId}
         tournament={tournament}

@@ -16,9 +16,9 @@ export const ExperienceTournamentCard = (
   return (
     <div className="bg-gray-100 p-4 rounded-lg border border-gray-200 space-y-4">
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h4 className="text-xl font-semibold tracking-tight">
-            {getTournamentTitle(props.tournament, 12)}
+        <div className="flex items-center justify-between gap-2">
+          <h4 className="text-xl font-semibold tracking-tight truncate">
+            {getTournamentTitle(props.tournament)}
           </h4>
           <TournamentStatusBadge status={props.tournament.status} />
         </div>

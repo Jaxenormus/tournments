@@ -16,6 +16,7 @@ import Link from "next/link";
 
 import { notFound } from "next/navigation";
 import { getTournamentTitle } from "@/utils/getTournamentTitle";
+import { Header } from "@/components/common/header";
 
 interface TournamentHubPageProps {
   params: { tournamentId: string };
@@ -54,25 +55,20 @@ const TournamentHubPage = async (props: TournamentHubPageProps) => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">
-          {getTournamentTitle(tournament)}
-        </h2>
-        <div className="flex items-center space-x-2">
-          <JoinTournamentButton
-            hasJoined={
-              !!participants.find(
-                (participant) => participant.user.id === session.user.id
-              )
-            }
-            tournament={tournament}
-            joinTournament={async () => {
-              "use server";
-              return joinExperienceTournament(session, tournament.id);
-            }}
-          />
-        </div>
-      </div>
+      <Header title={getTournamentTitle(tournament)}>
+        <JoinTournamentButton
+          hasJoined={
+            !!participants.find(
+              (participant) => participant.user.id === session.user.id
+            )
+          }
+          tournament={tournament}
+          joinTournament={async () => {
+            "use server";
+            return joinExperienceTournament(session, tournament.id);
+          }}
+        />
+      </Header>
       <TournamentStatusBadge status={tournament.status} />
       <p className="text-gray-500">{tournament.description}</p>
       <ParticipantTable
