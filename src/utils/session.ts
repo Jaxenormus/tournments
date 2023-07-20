@@ -9,14 +9,22 @@ export const isExperienceOwner = async (accessToken: string) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    const data = (await res.json()) as {
-      user: {
-        authorized_user: {
-          role: "owner" | "admin" | "moderator";
-        };
-      };
-    };
-    console.log(data);
+
+    const data = (await res.json()) as
+      | {
+          user: {
+            authorized_user: {
+              role: "owner" | "admin" | "moderator";
+            };
+          };
+        }
+      | { error: { status: number; message: string } };
+
+    if ("error" in data) {
+      console.error(data.error);
+      return false;
+    }
+
     return data.user.authorized_user.role === "owner";
   } catch (e) {
     return false;
@@ -35,7 +43,6 @@ export const hasAccess = async (
   const userId = cookies().get("tourney_uid");
   const experienceId = cookies().get("tourney_eid");
   const accessToken = cookies().get("tourney_at");
-  console.log(userId, experienceId, accessToken);
   if (!userId || !experienceId || !accessToken) {
     return redirect("/no-access");
   }
@@ -43,7 +50,6 @@ export const hasAccess = async (
     where: { id: userId.value },
     include: { memberships: true },
   });
-  console.log(user);
   if (!user) {
     return redirect("/no-access");
   }
@@ -57,7 +63,6 @@ export const hasAccess = async (
   if (access === "admin" || access === "adminOrConsumer") {
     isAdmin = await isExperienceOwner(accessToken.value);
   }
-  console.log(isAdmin, hasMembership);
   if (
     (access === "adminOrConsumer" && !isAdmin && !hasMembership) ||
     (access === "admin" && !isAdmin) ||

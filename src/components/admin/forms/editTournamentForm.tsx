@@ -12,7 +12,7 @@ import type { z } from "zod";
 import type { Tournament } from "@prisma/client";
 
 import { editTournamentSchema } from "@/actions/schema";
-import { editTournament } from "@/actions/tournament";
+import { editTournament } from "@/actions/admin";
 
 import { toast } from "sonner";
 import { dayjs } from "@/integrations/dayjs";

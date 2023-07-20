@@ -1,4 +1,4 @@
-import { findTournament } from "@/actions/tournament";
+import { findTournament } from "@/actions/admin";
 import { EditTournamentForm } from "@/components/admin/forms/editTournamentForm";
 import {
   Breadcrumb,

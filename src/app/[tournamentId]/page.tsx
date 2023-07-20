@@ -2,7 +2,7 @@ import {
   findExperienceTournament,
   joinExperienceTournament,
   listExperienceTournamentParticipants,
-} from "@/actions/experience";
+} from "@/actions/user";
 import { JoinTournamentButton } from "@/components/joinTournamentButton";
 import { ParticipantTable } from "@/components/participantsTable";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";

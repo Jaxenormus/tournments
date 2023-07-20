@@ -12,7 +12,7 @@ import { createTournamentSchema } from "@/actions/schema";
 
 import dayjs from "dayjs";
 import { minDelay } from "@/utils/minDelay";
-import { createTournament } from "@/actions/tournament";
+import { createTournament } from "@/actions/admin";
 import { toast } from "sonner";
 import type { TourneySession } from "@/utils/session";
 

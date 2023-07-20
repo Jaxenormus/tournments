@@ -1,4 +1,4 @@
-import { listExperienceTournaments } from "@/actions/experience";
+import { listExperienceTournaments } from "@/actions/user";
 import { getHubStatistics } from "@/actions/user";
 import { ExperienceTournamentCard } from "@/components/experienceTournamentCard";
 import { StatisticCard } from "@/components/statisticCard";

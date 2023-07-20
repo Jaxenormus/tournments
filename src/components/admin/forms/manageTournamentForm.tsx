@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import FormSelect from "@/components/ui/form/formSelect";
 import type { manageTournamentSchema } from "@/actions/schema";
-import { manageTournament } from "@/actions/tournament";
+import { manageTournament } from "@/actions/admin";
 import type { Participant, Tournament } from "@prisma/client";
 import { toast } from "sonner";
 import { minDelay } from "@/utils/minDelay";

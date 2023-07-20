@@ -1,4 +1,4 @@
-import { findTournament, listParticipants } from "@/actions/tournament";
+import { findTournament, listParticipants } from "@/actions/admin";
 import { ManageTournamentForm } from "@/components/admin/forms/manageTournamentForm";
 import {
   Breadcrumb,

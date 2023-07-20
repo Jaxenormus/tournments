@@ -1,4 +1,4 @@
-import { findTournament, listParticipants } from "@/actions/tournament";
+import { findTournament, listParticipants } from "@/actions/admin";
 import { ParticipantTable } from "@/components/participantsTable";
 import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
 import {

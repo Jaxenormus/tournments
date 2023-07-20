@@ -1,4 +1,4 @@
-import { listTournaments } from "@/actions/tournament";
+import { listTournaments } from "@/actions/admin";
 import { AdminTournamentTable } from "@/components/admin/tournamentTable";
 
 import { Button } from "@/components/ui/button";
