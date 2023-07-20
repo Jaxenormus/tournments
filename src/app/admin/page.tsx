@@ -1,7 +1,7 @@
 import { listTournaments } from "@/actions/admin";
 import { AdminTournamentTable } from "@/components/admin/tournamentTable";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 import { hasAccess } from "@/utils/session";
 
 import Link from "next/link";

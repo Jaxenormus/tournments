@@ -11,7 +11,7 @@ import { manageTournament } from "@/actions/admin";
 import type { Participant, Tournament } from "@prisma/client";
 import { toast } from "sonner";
 import { minDelay } from "@/utils/minDelay";
-import { LoadingFormButton } from "@/components/loadingButton";
+import { LoadingFormButton } from "@/components/ui/button/loading";
 import type { TourneySession } from "@/utils/session";
 
 interface ManageTournamentFormProps {

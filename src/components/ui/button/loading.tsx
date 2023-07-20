@@ -1,5 +1,5 @@
-import type { ButtonProps } from "@/components/ui/button";
-import { Button } from "@/components/ui/button";
+import type { ButtonProps } from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button/button";
 import { Loader2 } from "lucide-react";
 import type { MouseEvent } from "react";
 import { useTransition } from "react";

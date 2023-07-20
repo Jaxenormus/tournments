@@ -1,12 +1,12 @@
 import { findTournament, listParticipants } from "@/actions/admin";
-import { ParticipantTable } from "@/components/participantsTable";
-import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
+import { ParticipantTable } from "@/components/common/participantsTable";
+import { TournamentStatusBadge } from "@/components/common/tournamentStatusBadge";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 import { notFound } from "next/navigation";

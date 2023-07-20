@@ -18,7 +18,7 @@ import {
 } from "@tanstack/react-table";
 import type { Tournament, TournamentStatus } from "@prisma/client";
 import { dayjs } from "@/integrations/dayjs";
-import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
+import { TournamentStatusBadge } from "@/components/common/tournamentStatusBadge";
 import { TournamentTableActions } from "@/components/admin/tournamentTableActions";
 import type { TourneySession } from "@/utils/session";
 

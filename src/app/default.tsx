@@ -1,4 +1,4 @@
-import { LoadingScreen } from "@/components/loadingScreen";
+import { LoadingScreen } from "@/components/common/loadingScreen";
 
 const Default = () => {
   return <LoadingScreen />;

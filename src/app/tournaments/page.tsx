@@ -2,8 +2,8 @@ import {
   fetchWhopExperienceName,
   listExperienceTournaments,
 } from "@/actions/user";
-import { ExperienceTournamentCard } from "@/components/experienceTournamentCard";
-import { Button } from "@/components/ui/button";
+import { ExperienceTournamentCard } from "@/components/user/experienceTournamentCard";
+import { Button } from "@/components/ui/button/button";
 import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 

@@ -1,8 +1,8 @@
 import { listExperienceTournaments } from "@/actions/user";
 import { getHubStatistics } from "@/actions/user";
-import { ExperienceTournamentCard } from "@/components/experienceTournamentCard";
-import { StatisticCard } from "@/components/statisticCard";
-import { Button } from "@/components/ui/button";
+import { ExperienceTournamentCard } from "@/components/user/experienceTournamentCard";
+import { StatisticCard } from "@/components/user/statisticCard";
+import { Button } from "@/components/ui/button/button";
 import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 

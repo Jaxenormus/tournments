@@ -3,9 +3,9 @@ import {
   joinExperienceTournament,
   listExperienceTournamentParticipants,
 } from "@/actions/user";
-import { JoinTournamentButton } from "@/components/joinTournamentButton";
-import { ParticipantTable } from "@/components/participantsTable";
-import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
+import { JoinTournamentButton } from "@/components/user/joinTournamentButton";
+import { ParticipantTable } from "@/components/common/participantsTable";
+import { TournamentStatusBadge } from "@/components/common/tournamentStatusBadge";
 import {
   Breadcrumb,
   BreadcrumbItem,

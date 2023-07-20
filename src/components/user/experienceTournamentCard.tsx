@@ -1,5 +1,5 @@
-import { TournamentStatusBadge } from "@/components/tournamentStatusBadge";
-import { Button } from "@/components/ui/button";
+import { TournamentStatusBadge } from "@/components/common/tournamentStatusBadge";
+import { Button } from "@/components/ui/button/button";
 import { dayjs } from "@/integrations/dayjs";
 import type { Tournament } from "@prisma/client";
 import Link from "next/link";

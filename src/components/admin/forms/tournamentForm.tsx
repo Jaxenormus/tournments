@@ -19,7 +19,7 @@ import { TournamentStatus } from "@prisma/client";
 import { useFormContext } from "react-hook-form";
 import type { z } from "zod";
 import type { editTournamentSchema } from "@/actions/schema";
-import { LoadingFormButton } from "@/components/loadingButton";
+import { LoadingFormButton } from "@/components/ui/button/loading";
 
 interface TournamentFormProps {
   type: "create" | "edit";
