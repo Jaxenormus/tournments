@@ -13,8 +13,8 @@ const AdminNewPage = async () => {
     <div className="flex-1 space-y-4 p-8 pt-6">
       <Breadcrumb>
         <BreadcrumbItem>
-          <BreadcrumbLink as={Link} href="/">
-            Home
+          <BreadcrumbLink as={Link} href="/admin">
+            Tournaments
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
