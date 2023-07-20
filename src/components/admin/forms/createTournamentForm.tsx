@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import type { z } from "zod";
 import { createTournamentSchema } from "@/actions/schema";
 
-import {dayjs} from "@/integrations/dayjs";
+import { dayjs } from "@/integrations/dayjs";
 import { minDelay } from "@/utils/minDelay";
 import { createTournament } from "@/actions/admin";
 import { toast } from "sonner";
@@ -25,7 +25,10 @@ export const CreateTournamentForm = (props: CreateTournamentFormProps) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof createTournamentSchema>>({
     resolver: zodResolver(createTournamentSchema),
-    defaultValues: { date: dayjs().format("YYYY-MM-DDTHH:mm") },
+    defaultValues: {
+      date: dayjs().format("YYYY-MM-DDTHH:mm"),
+      experienceIds: [props.session.experienceId],
+    },
   });
   return (
     <Form {...form}>
