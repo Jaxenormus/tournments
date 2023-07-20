@@ -25,7 +25,11 @@ export const GET = async (req: NextRequest) => {
     }),
   });
 
-  const { access_token } = (await oauth.json()) as {
+  const oauthData = await oauth.json();
+
+  console.log(oauthData);
+
+  const { access_token } = oauthData as {
     access_token: string;
     token_type: string;
     expires_in: number;
@@ -41,9 +45,13 @@ export const GET = async (req: NextRequest) => {
     },
   });
 
+  const meData = await me.json();
+
+  console.log(meData);
+
   const {
     user: { id, username },
-  } = (await me.json()) as {
+  } = meData as {
     user: {
       id: string;
       username: string;
