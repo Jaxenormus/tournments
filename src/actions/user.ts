@@ -15,12 +15,14 @@ export const getHubStatistics = async (session: TourneySession) => {
       participants: { some: { user: { id: session.user.id } } },
       status: "ACTIVE",
       date: { gt: new Date() },
+      experienceIds: { has: session.experienceId },
     },
   });
   const wonTournaments = await prisma.tournament.count({
     where: {
       winner: { id: session.user.id },
       status: "COMPLETED",
+      experienceIds: { has: session.experienceId },
     },
   });
   return {
