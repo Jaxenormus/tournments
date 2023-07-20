@@ -5,8 +5,10 @@ import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 
 const ExperienceTournamentsPage = async () => {
-  await hasAccess("adminOrConsumer");
-  const upcomingTournaments = await listExperienceTournaments(["ACTIVE"]);
+  const session = await hasAccess("adminOrConsumer");
+  const upcomingTournaments = await listExperienceTournaments(session, [
+    "ACTIVE",
+  ]);
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">

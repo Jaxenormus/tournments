@@ -1,15 +1,20 @@
 import type { TourneySession } from "@/utils/session";
 import { prisma } from "../../prisma";
 import type { TournamentStatus } from "@prisma/client";
+import { tournamentRevalidation } from "@/actions";
 
-export const findExperienceTournament = async (id: string) => {
+export const findExperienceTournament = async (
+  session: TourneySession,
+  id: string
+) => {
   const tournament = await prisma.tournament.findFirst({
-    where: { id },
+    where: { id, experienceIds: { has: session.experienceId } },
   });
   return tournament;
 };
 
 export const listExperienceTournaments = async (
+  session: TourneySession,
   status: TournamentStatus[],
   showPast = false
 ) => {
@@ -17,6 +22,7 @@ export const listExperienceTournaments = async (
     where: {
       status: { in: status },
       ...(showPast ? {} : { date: { gt: new Date() } }),
+      experienceIds: { has: session.experienceId },
     },
     include: {
       participants: { select: { id: true, user: { select: { id: true } } } },
@@ -46,7 +52,10 @@ export const listParticipatingExperienceTournaments = async (
   session: TourneySession
 ) => {
   const tournaments = await prisma.tournament.findMany({
-    where: { participants: { some: { user: { id: session.user.id } } } },
+    where: {
+      participants: { some: { user: { id: session.user.id } } },
+      experienceIds: { has: session.experienceId },
+    },
   });
   return tournaments;
 };
@@ -56,22 +65,28 @@ export const joinExperienceTournament = async (
   id: string
 ) => {
   const tournament = await prisma.tournament.findFirst({
-    where: { id, status: "ACTIVE" },
+    where: {
+      id,
+      status: "ACTIVE",
+      experienceIds: { has: session.experienceId },
+    },
   });
   if (!tournament) return { error: "Unable to find tournament" };
   const user = await prisma.user.findFirst({
     where: { id: session.user.id },
   });
   if (!user) return { error: "Unable to find authenticated user" };
-  const experienceCredits = await prisma.credit.count({
+  const experienceCredits = await prisma.credit.findMany({
     where: { experienceIds: { has: session.experienceId } },
   });
-  if (experienceCredits < tournament.entryFee)
+  if (experienceCredits.length < tournament.entryFee)
     return { error: "Insufficient credits" };
-  return await prisma.$transaction(async (tx) => {
-    await tx.credit.deleteMany({
-      
-    })
+  const data = await prisma.$transaction(async (tx) => {
+    const experienceCreditIds = experienceCredits.map((credit) => credit.id);
+    for (let i = 0; i < tournament.entryFee; i++) {
+      await tx.credit.delete({ where: { id: experienceCreditIds[i] } });
+      experienceCreditIds.splice(i, 1);
+    }
     const participant = await tx.participant.create({
       data: {
         id: `${id}-${session.user.id}`,
@@ -81,4 +96,6 @@ export const joinExperienceTournament = async (
     });
     return participant;
   });
+  tournamentRevalidation();
+  return data;
 };

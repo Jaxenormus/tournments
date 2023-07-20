@@ -46,20 +46,21 @@ model Participant {
 }
 
 model Tournament {
-  id           String           @id @default(uuid())
-  user         User             @relation("Creator", fields: [userId], references: [id])
-  userId       String
-  name         String
-  description  String
-  date         DateTime
-  entryFee     Int
-  prize        String
-  location     String
-  winner       User?            @relation("Winner", fields: [winnerId], references: [id])
-  winnerId     String?
-  status       TournamentStatus @default(DRAFT)
-  createdAt    DateTime         @default(now())
-  participants Participant[]
+  id            String           @id @default(uuid())
+  user          User             @relation("Creator", fields: [userId], references: [id])
+  userId        String
+  name          String
+  description   String
+  date          DateTime
+  experienceIds String[]
+  entryFee      Int
+  prize         String
+  location      String
+  winner        User?            @relation("Winner", fields: [winnerId], references: [id])
+  winnerId      String?
+  status        TournamentStatus @default(DRAFT)
+  createdAt     DateTime         @default(now())
+  participants  Participant[]
 }
 
 enum TournamentStatus {

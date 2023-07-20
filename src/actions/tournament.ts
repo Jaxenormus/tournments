@@ -12,6 +12,7 @@ import { prisma } from "../../prisma";
 import dayjs from "dayjs";
 import { notFound } from "next/navigation";
 import type { TourneySession } from "@/utils/session";
+import { tournamentRevalidation } from "@/actions";
 
 export const createTournament = async (
   session: TourneySession,
@@ -22,6 +23,7 @@ export const createTournament = async (
       ...input,
       date: dayjs(input.date).toDate(),
       status: "ACTIVE",
+      experienceIds: [session.experienceId],
       user: {
         connectOrCreate: {
           where: { id: session.user.id },
@@ -33,6 +35,7 @@ export const createTournament = async (
       },
     },
   });
+  tournamentRevalidation();
   return tournament;
 };
 
@@ -66,6 +69,7 @@ export const editTournament = async (
       date: dayjs(input.date).toDate(),
     },
   });
+  tournamentRevalidation();
   return tournament;
 };
 
@@ -85,6 +89,7 @@ export const manageTournament = async (
       },
     },
   });
+  tournamentRevalidation();
   return tournament;
 };
 

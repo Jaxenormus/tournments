@@ -16,7 +16,10 @@ interface TournamentHubPageProps {
 
 const TournamentHubPage = async (props: TournamentHubPageProps) => {
   const session = await hasAccess("adminOrConsumer");
-  const tournament = await findExperienceTournament(props.params.tournamentId);
+  const tournament = await findExperienceTournament(
+    session,
+    props.params.tournamentId
+  );
   if (!tournament) notFound();
   const participants = await listExperienceTournamentParticipants(
     props.params.tournamentId

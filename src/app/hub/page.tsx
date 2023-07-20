@@ -9,6 +9,7 @@ import Link from "next/link";
 const MePage = async () => {
   const session = await hasAccess("adminOrConsumer");
   const tournaments = await listExperienceTournaments(
+    session,
     ["COMPLETED", "ACTIVE", "CANCELLED"],
     true
   );
