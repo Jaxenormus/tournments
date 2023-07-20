@@ -16,7 +16,7 @@ export const isExperienceOwner = async (
 ) => {
   try {
     const res = await fetch(
-      `https://api.whop.com/api/v2/me/has_access/${experienceId}`,
+      `https://staging.whop.com/api/v2/me/has_access/${experienceId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
