@@ -188,6 +188,8 @@ export const listWhopExperiences = async (
     return [];
   }
 
+  console.log(data);
+
   const experiences = data.data.map((experience) => ({
     id: experience.id,
     name: experience.name,
