@@ -18,6 +18,7 @@ import { Eye, Share2, Settings, Medal, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
+import { useRouter } from "next/navigation";
 
 interface TournamentTableActionsProps {
   session: TourneySession;
@@ -25,6 +26,7 @@ interface TournamentTableActionsProps {
 }
 
 export const TournamentTableActions = (props: TournamentTableActionsProps) => {
+  const router = useRouter();
   const [_, copy] = useCopyToClipboard();
   return (
     <div className="flex justify-end">
@@ -76,6 +78,7 @@ export const TournamentTableActions = (props: TournamentTableActionsProps) => {
                 handleDelete={async () => {
                   await deleteTournament(props.session, props.tournamentId);
                   toast.success("Tournament deleted");
+                  router.refresh();
                 }}
               >
                 <Trash2 className="w-4 h-4" />
