@@ -1,5 +1,5 @@
 import type { TourneySession } from "@/actions/session";
-import { prisma } from "../../prisma";
+import { prisma } from "@/prisma";
 import type { TournamentStatus } from "@prisma/client";
 import { tournamentRevalidation } from "@/actions";
 import { captureException } from "@sentry/nextjs";

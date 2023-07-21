@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/dist/client/components/headers";
-import { prisma } from "../../prisma";
+import { prisma } from "@/prisma";
 import { redirect } from "next/navigation";
 import { captureException, setUser } from "@sentry/nextjs";
 

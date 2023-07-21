@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-
 import { z } from "zod";
-import { prisma } from "../../../../prisma";
+import { prisma } from "@/prisma";
 
 const webhookSchema = z.object({
   action: z.union([

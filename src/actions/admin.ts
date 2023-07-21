@@ -8,7 +8,7 @@ import type {
   manageTournamentSchema,
 } from "@/actions/schema";
 
-import { prisma } from "../../prisma";
+import { prisma } from "@/prisma";
 import { dayjs } from "@/integrations/dayjs";
 import { notFound } from "next/navigation";
 import type { TourneySession } from "@/actions/session";

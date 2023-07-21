@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma";
+import { prisma } from "@/prisma";
 import { inngest } from "./client";
 
 export const handleScheduleTournamentCompletion = inngest.createFunction(

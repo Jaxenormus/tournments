@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { prisma } from "../../../../prisma";
+import { prisma } from "@/prisma";
 import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { captureException } from "@sentry/nextjs";
 
