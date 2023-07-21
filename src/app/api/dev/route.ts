@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export const GET = () => {
   const uid = "user_nrxHyu5XRFjkS";
-  const at = "gU6gHk7NTpouvCSlN9DlvVn6RyhHtmqzpCWklJ9J_jI";
+  const at = "INogxebHx13o-JgNxq-vYyEdxZzrK11nId35cfoc1jg";
   const eid = "exp_aBvfK4qVDMkKEs";
 
   const res = NextResponse.redirect(`${getBaseUrl()}/admin`);

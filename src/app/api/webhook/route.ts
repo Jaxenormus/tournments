@@ -61,40 +61,40 @@ export const GET = async (req: NextRequest) => {
             { status: 200 }
           );
         }
-        case "membership.went_valid": {
-          await prisma.$transaction(async (tx) => {
-            payload.data.product.experiences.forEach(async (experienceId) => {
-              await tx.membership.create({
-                data: {
-                  id: `${payload.data.user.id}-${experienceId}`,
-                  user: {
-                    connectOrCreate: {
-                      where: { id: payload.data.user.id },
-                      create: {
-                        id: payload.data.user.id,
-                        name: payload.data.user.username,
-                      },
-                    },
-                  },
-                  experienceId: experienceId,
-                },
-              });
-            });
-          });
-          return NextResponse.json({ handled: true }, { status: 200 });
-        }
-        case "membership.went_invalid": {
-          await prisma.$transaction(async (tx) => {
-            payload.data.product.experiences.forEach(async (experienceId) => {
-              await tx.membership.delete({
-                where: {
-                  id: `${payload.data.user.id}-${experienceId}`,
-                },
-              });
-            });
-          });
-          return NextResponse.json({ handled: true }, { status: 200 });
-        }
+        // case "membership.went_valid": {
+        //   await prisma.$transaction(async (tx) => {
+        //     payload.data.product.experiences.forEach(async (experienceId) => {
+        //       await tx.membership.create({
+        //         data: {
+        //           id: `${payload.data.user.id}-${experienceId}`,
+        //           user: {
+        //             connectOrCreate: {
+        //               where: { id: payload.data.user.id },
+        //               create: {
+        //                 id: payload.data.user.id,
+        //                 name: payload.data.user.username,
+        //               },
+        //             },
+        //           },
+        //           experienceId: experienceId,
+        //         },
+        //       });
+        //     });
+        //   });
+        //   return NextResponse.json({ handled: true }, { status: 200 });
+        // }
+        // case "membership.went_invalid": {
+        //   await prisma.$transaction(async (tx) => {
+        //     payload.data.product.experiences.forEach(async (experienceId) => {
+        //       await tx.membership.delete({
+        //         where: {
+        //           id: `${payload.data.user.id}-${experienceId}`,
+        //         },
+        //       });
+        //     });
+        //   });
+        //   return NextResponse.json({ handled: true }, { status: 200 });
+        // }
         default:
           return NextResponse.json(
             { error: `Unsupported Action: ${payload.action}` },

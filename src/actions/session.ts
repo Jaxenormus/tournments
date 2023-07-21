@@ -35,6 +35,36 @@ export const isExperienceOwner = async (accessToken: string) => {
   }
 };
 
+export const isExperienceConsumer = async (
+  accessToken: string,
+  experienceId: string
+) => {
+  try {
+    const res = await fetch(`${process.env.WHOP_API_URL}/api/v2/oauth/info`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = (await res.json()) as
+      | {
+          experiences: [{ id: string }];
+        }
+      | { error: { status: number; message: string } };
+
+    if ("error" in data) {
+      captureException(data.error);
+      return false;
+    }
+
+    return data.experiences.some(
+      (experience) => experience.id === experienceId
+    );
+  } catch (e) {
+    return false;
+  }
+};
+
 export interface TourneySession {
   user: { id: string; name: string };
   experienceId: string;
@@ -52,20 +82,20 @@ export const hasAccess = async (
   }
   const user = await prisma.user.findFirst({
     where: { id: userId.value },
-    include: { memberships: true },
   });
   if (!user) {
     return redirect("/no-access");
   }
   let hasMembership = false;
   let isAdmin = false;
-  if (access === "consumer" || access === "adminOrConsumer") {
-    hasMembership = user.memberships.some(
-      (membership) => membership.experienceId === experienceId.value
-    );
-  }
   if (access === "admin" || access === "adminOrConsumer") {
     isAdmin = await isExperienceOwner(accessToken.value);
+  }
+  if (access === "consumer" || (access === "adminOrConsumer" && !isAdmin)) {
+    hasMembership = await isExperienceConsumer(
+      accessToken.value,
+      experienceId.value
+    );
   }
   if (
     (access === "adminOrConsumer" && !isAdmin && !hasMembership) ||
