@@ -1,5 +1,5 @@
-import type { ButtonProps } from "@/components/ui/button";
-import { Button } from "@/components/ui/button";
+import type { ButtonProps } from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button/button";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import { useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";

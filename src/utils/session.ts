@@ -2,29 +2,31 @@ import { cookies } from "next/dist/client/components/headers";
 import { prisma } from "../../prisma";
 import { redirect } from "next/navigation";
 
-interface HasAccessResponse {
-  valid: true;
-  authorized_user?: {
-    role: "owner" | "admin" | "moderator";
-    permission_level: 0 | 1 | 2;
-  };
-}
-
-export const isExperienceOwner = async (
-  accessToken: string,
-  experienceId: string
-) => {
+export const isExperienceOwner = async (accessToken: string) => {
   try {
-    const res = await fetch(
-      `https://api.whop.com/api/v2/me/has_access/${experienceId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+    const res = await fetch(`${process.env.WHOP_API_URL}/api/v2/oauth/info`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = (await res.json()) as
+      | {
+          user: {
+            authorized_user: {
+              role: "owner" | "admin" | "moderator";
+            };
+          };
+        }
+      | { error: { status: number; message: string } };
+
+    if ("error" in data) {
+      console.error(data.error);
+      return false;
+    }
+    return ["owner", "admin", "moderator"].includes(
+      data.user.authorized_user.role
     );
-    const data = (await res.json()) as HasAccessResponse;
-    return data.authorized_user?.permission_level === 0;
   } catch (e) {
     return false;
   }
@@ -33,6 +35,7 @@ export const isExperienceOwner = async (
 export interface TourneySession {
   user: { id: string; name: string };
   experienceId: string;
+  accessToken: string;
 }
 
 export const hasAccess = async (
@@ -59,7 +62,7 @@ export const hasAccess = async (
     );
   }
   if (access === "admin" || access === "adminOrConsumer") {
-    isAdmin = await isExperienceOwner(accessToken.value, experienceId.value);
+    isAdmin = await isExperienceOwner(accessToken.value);
   }
   if (
     (access === "adminOrConsumer" && !isAdmin && !hasMembership) ||
@@ -71,5 +74,6 @@ export const hasAccess = async (
   return {
     user: { id: userId.value, name: user.name },
     experienceId: experienceId.value,
+    accessToken: accessToken.value,
   };
 };

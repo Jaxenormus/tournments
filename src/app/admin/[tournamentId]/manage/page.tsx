@@ -1,10 +1,12 @@
-import { findTournament, listParticipants } from "@/actions/tournament";
+import { findTournament, listParticipants } from "@/actions/admin";
 import { ManageTournamentForm } from "@/components/admin/forms/manageTournamentForm";
+import { Header } from "@/components/common/header";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
+import { getTournamentTitle } from "@/utils/getTournamentTitle";
 import { hasAccess } from "@/utils/session";
 import Link from "next/link";
 
@@ -26,18 +28,13 @@ const AdminManagePage = async (props: AdminManagePageProps) => {
     <div className="flex-1 space-y-4 p-8 pt-6">
       <Breadcrumb>
         <BreadcrumbItem>
-          <BreadcrumbLink as={Link} href="/">
-            Home
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
           <BreadcrumbLink as={Link} href="/admin">
             Tournaments
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href={`/admin/${tournament.id}`}>
-            {tournament.name}
+            {getTournamentTitle(tournament)}
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
@@ -50,9 +47,7 @@ const AdminManagePage = async (props: AdminManagePageProps) => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Manage Tournament</h2>
-      </div>
+      <Header title="Manage Tournament" />
       <ManageTournamentForm
         id={props.params.tournamentId}
         tournament={tournament}

@@ -3,6 +3,7 @@
 import FormInput from "@/components/ui/form/formInput";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,10 +20,12 @@ import { TournamentStatus } from "@prisma/client";
 import { useFormContext } from "react-hook-form";
 import type { z } from "zod";
 import type { editTournamentSchema } from "@/actions/schema";
-import { LoadingFormButton } from "@/components/loadingButton";
+import { LoadingFormButton } from "@/components/ui/button/loading";
+import ReactSelect from "react-select";
 
 interface TournamentFormProps {
   type: "create" | "edit";
+  experiences: { id: string; name: string }[];
 }
 
 export const TournamentForm = (props: TournamentFormProps) => {
@@ -31,26 +34,46 @@ export const TournamentForm = (props: TournamentFormProps) => {
     <div className="space-y-5">
       <FormInput
         control={form.control}
-        name="name"
-        label="Name"
-        placeholder="Spikeball Tournament"
-      />
-      <FormInput
-        control={form.control}
-        type="textarea"
+        type="input"
         name="description"
         label="Description"
-        placeholder="Participate in the most competitive spikeball tournament in the world!"
+        placeholder="4 teams of two"
       />
-      <FormInput
+      <FormField
         control={form.control}
-        type="number"
-        name="entryFee"
-        label="Entry Fee (in Whop Credits)"
-        placeholder="10"
-        onChange={(e) =>
-          form.setValue("entryFee", parseInt(e.target.value, 10))
-        }
+        name="experienceIds"
+        render={() => (
+          <FormItem className="space-y-2">
+            <div>
+              <FormLabel>Allowed Experiences</FormLabel>
+              <FormDescription>
+                Select experiences that are allowed to participate in this
+                tournament by purchasing access. Please note that 1 purchase is
+                1 tournament booking
+              </FormDescription>
+            </div>
+            <ReactSelect
+              value={form.watch("experienceIds").map((eid) => ({
+                label:
+                  props.experiences.find((experience) => experience.id === eid)
+                    ?.name ?? "Unknown",
+                value: eid,
+              }))}
+              options={props.experiences.map((experience) => ({
+                label: experience.name,
+                value: experience.id,
+              }))}
+              isMulti
+              onChange={(values) => {
+                form.setValue(
+                  "experienceIds",
+                  values?.map((value) => value.value)
+                );
+              }}
+            />
+            <FormMessage className="pb-2 pl-1" />
+          </FormItem>
+        )}
       />
       <FormInput
         control={form.control}

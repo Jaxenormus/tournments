@@ -1,13 +1,14 @@
 import { type ClassValue, clsx } from "clsx";
-import React from "react";
+import type { ReactElement, ReactNode } from "react";
+import { Children, isValidElement } from "react";
 import { twMerge } from "tailwind-merge";
 
-export function cn(...inputs: ClassValue[]) {
+export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
-}
+};
 
-export function getValidChildren(children: React.ReactNode) {
-  return React.Children.toArray(children).filter((child) =>
-    React.isValidElement(child)
-  ) as React.ReactElement[];
-}
+export const getValidChildren = (children: ReactNode) => {
+  return Children.toArray(children).filter((child) =>
+    isValidElement(child)
+  ) as ReactElement[];
+};

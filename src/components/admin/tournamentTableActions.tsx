@@ -1,8 +1,8 @@
 "use client";
 
-import { deleteTournament } from "@/actions/tournament";
-import { DestructiveButton } from "@/components/destructiveButton";
-import { TooltipButton } from "@/components/tooltipButton";
+import { deleteTournament } from "@/actions/admin";
+import { DestructiveButton } from "@/components/ui/button/destructive";
+import { TooltipButton } from "@/components/ui/button/tooltip";
 
 import {
   Tooltip,

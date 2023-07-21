@@ -12,7 +12,7 @@ import type { z } from "zod";
 import type { Tournament } from "@prisma/client";
 
 import { editTournamentSchema } from "@/actions/schema";
-import { editTournament } from "@/actions/tournament";
+import { editTournament } from "@/actions/admin";
 
 import { toast } from "sonner";
 import { dayjs } from "@/integrations/dayjs";
@@ -23,6 +23,7 @@ interface EditTournamentFormProps {
   id: string;
   session: TourneySession;
   tournament: Tournament;
+  experiences: { id: string; name: string }[];
 }
 
 export const EditTournamentForm = (props: EditTournamentFormProps) => {
@@ -39,13 +40,16 @@ export const EditTournamentForm = (props: EditTournamentFormProps) => {
       <form
         onSubmit={form.handleSubmit(async (values) => {
           const tournament = await minDelay(async () => {
-            return await editTournament(props.session, props.id, values);
+            return await editTournament(props.session, props.id, {
+              ...values,
+              date: dayjs.tz(values.date, dayjs.tz.guess()).toISOString(),
+            });
           }, 800);
           toast.success("Tournament has been updated");
           router.push(`/admin/${tournament.id}`);
         })}
       >
-        <TournamentForm type="edit" />
+        <TournamentForm type="edit" experiences={props.experiences} />
       </form>
     </Form>
   );

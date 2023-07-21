@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const oauth = await fetch("https://data.whop.com/api/v3/oauth/token", {
+  const oauth = await fetch(`${process.env.WHOP_API_URL}/api/v3/oauth/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -25,48 +25,64 @@ export const GET = async (req: NextRequest) => {
     }),
   });
 
-  const { access_token } = (await oauth.json()) as {
-    access_token: string;
-    token_type: string;
-    expires_in: number;
-    refresh_token: string;
-    scope: string;
-    created_at: number;
-  };
+  const oauthData = (await oauth.json()) as
+    | {
+        access_token: string;
+        token_type: string;
+        expires_in: number;
+        refresh_token: string;
+        scope: string;
+        created_at: number;
+      }
+    | { error: { status: number; message: string } };
 
-  const me = await fetch("https://api.whop.com/api/v2/oauth/info", {
+  if ("error" in oauthData) {
+    console.error(oauthData.error);
+    const url = new URL(redirectUri);
+    url.pathname = "/no-access";
+    return NextResponse.redirect(url);
+  }
+
+  const me = await fetch(`${process.env.WHOP_API_URL}/api/v2/oauth/info`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${access_token}`,
+      Authorization: `Bearer ${oauthData.access_token}`,
     },
   });
 
-  const {
-    user: { id, username },
-  } = (await me.json()) as {
-    user: {
-      id: string;
-      username: string;
-      email: string;
-      profile_pic_url: string;
-      social_accounts: {
-        service: string;
-        username: string;
-        id: string;
-      }[];
-    };
-  };
+  const meData = (await me.json()) as
+    | {
+        user: {
+          id: string;
+          username: string;
+          email: string;
+          profile_pic_url: string;
+          social_accounts: {
+            service: string;
+            username: string;
+            id: string;
+          }[];
+        };
+      }
+    | { error: { status: number; message: string } };
+
+  if ("error" in meData) {
+    console.error(meData.error);
+    const url = new URL(redirectUri);
+    url.pathname = "/no-access";
+    return NextResponse.redirect(url);
+  }
 
   const url = new URL(redirectUri);
 
   const user = await prisma.user.upsert({
-    where: { id },
+    where: { id: meData.user.id },
     create: {
-      id,
-      name: username,
+      id: meData.user.id,
+      name: meData.user.username,
     },
     update: {
-      name: username,
+      name: meData.user.username,
     },
   });
 
@@ -80,7 +96,7 @@ export const GET = async (req: NextRequest) => {
 
   res.cookies.set("tourney_uid", user.id, cookieOptions);
   res.cookies.set("tourney_eid", experienceId, cookieOptions);
-  res.cookies.set("tourney_at", access_token, cookieOptions);
+  res.cookies.set("tourney_at", oauthData.access_token, cookieOptions);
 
   return res;
 };

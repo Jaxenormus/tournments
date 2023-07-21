@@ -2,7 +2,7 @@
 
 import type { ActionError } from "@/actions";
 import { isActionError } from "@/actions";
-import { LoadingButton } from "@/components/loadingButton";
+import { LoadingButton } from "@/components/ui/button/loading";
 import { minDelay } from "@/utils/minDelay";
 import type { Participant, Tournament } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -39,11 +39,7 @@ export const JoinTournamentButton = (props: JoinTournamentButtonProps) => {
         }
       }}
     >
-      {props.hasJoined ? (
-        "Joined"
-      ) : (
-        <> Join for {props.tournament.entryFee} credits</>
-      )}
+      {props.hasJoined ? "Joined" : "Join Tournament"}
     </LoadingButton>
   );
 };

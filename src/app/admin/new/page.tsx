@@ -1,4 +1,6 @@
+import { listWhopExperiences } from "@/actions/admin";
 import { CreateTournamentForm } from "@/components/admin/forms/createTournamentForm";
+import { Header } from "@/components/common/header";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,12 +11,13 @@ import Link from "next/link";
 
 const AdminNewPage = async () => {
   const session = await hasAccess("admin");
+  const experiences = await listWhopExperiences(session);
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <Breadcrumb>
         <BreadcrumbItem>
-          <BreadcrumbLink as={Link} href="/">
-            Home
+          <BreadcrumbLink as={Link} href="/admin">
+            Tournaments
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
@@ -23,10 +26,8 @@ const AdminNewPage = async () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Create Tournament</h2>
-      </div>
-      <CreateTournamentForm session={session} />
+      <Header title="Create Tournament" />
+      <CreateTournamentForm session={session} experiences={experiences} />
     </div>
   );
 };
