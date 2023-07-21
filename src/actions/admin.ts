@@ -128,6 +128,7 @@ export const deleteTournament = async (session: TourneySession, id: string) => {
     name: "tournament/delete",
     data: { id: tournament.id },
   });
+  tournamentRevalidation();
   return tournament;
 };
 
@@ -188,8 +189,6 @@ export const listWhopExperiences = async (
     captureException(data.error);
     return [];
   }
-
-  console.log(data);
 
   const experiences = data.data.map((experience) => ({
     id: experience.id,
