@@ -14,6 +14,7 @@ import { notFound } from "next/navigation";
 import type { TourneySession } from "@/actions/session";
 import { tournamentRevalidation } from "@/actions";
 import { inngest } from "@/inngest/client";
+import { captureException } from "@sentry/nextjs";
 
 export const createTournament = async (
   session: TourneySession,
@@ -184,7 +185,7 @@ export const listWhopExperiences = async (
     | { error: { status: number; message: string } };
 
   if ("error" in data) {
-    console.error(data.error);
+    captureException(data.error);
     return [];
   }
 

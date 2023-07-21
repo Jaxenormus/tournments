@@ -2,6 +2,7 @@ import type { TourneySession } from "@/actions/session";
 import { prisma } from "../../prisma";
 import type { TournamentStatus } from "@prisma/client";
 import { tournamentRevalidation } from "@/actions";
+import { captureException } from "@sentry/nextjs";
 
 export const findExperienceTournament = async (
   session: TourneySession,
@@ -119,7 +120,7 @@ export const fetchWhopExperienceName = async (
     | { error: { status: number; message: string } };
 
   if ("error" in experienceData) {
-    console.error(experienceData.error);
+    captureException(experienceData.error);
     return "Tournaments";
   }
 

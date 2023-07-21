@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "../../../../prisma";
 import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { captureException } from "@sentry/nextjs";
 
 export const GET = async (req: NextRequest) => {
   const code = req.nextUrl.searchParams.get("code");
@@ -37,7 +38,7 @@ export const GET = async (req: NextRequest) => {
     | { error: { status: number; message: string } };
 
   if ("error" in oauthData) {
-    console.error(oauthData.error);
+    captureException(oauthData.error);
     const url = new URL(redirectUri);
     url.pathname = "/no-access";
     return NextResponse.redirect(url);
@@ -67,7 +68,7 @@ export const GET = async (req: NextRequest) => {
     | { error: { status: number; message: string } };
 
   if ("error" in meData) {
-    console.error(meData.error);
+    captureException(meData.error);
     const url = new URL(redirectUri);
     url.pathname = "/no-access";
     return NextResponse.redirect(url);

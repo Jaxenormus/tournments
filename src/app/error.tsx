@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button/button";
+import { captureException } from "@sentry/nextjs";
 import { useEffect } from "react";
 
 interface ErrorPageProps {
@@ -10,7 +11,7 @@ interface ErrorPageProps {
 
 const ErrorPage = (props: ErrorPageProps) => {
   useEffect(() => {
-    console.error(props.error);
+    captureException(props.error);
   }, [props.error]);
   return (
     <div className="h-screen mx-auto max-w-7xl px-6 lg:px-8">

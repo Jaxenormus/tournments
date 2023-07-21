@@ -3,6 +3,7 @@
 import { cookies } from "next/dist/client/components/headers";
 import { prisma } from "../../prisma";
 import { redirect } from "next/navigation";
+import { captureException, setUser } from "@sentry/nextjs";
 
 export const isExperienceOwner = async (accessToken: string) => {
   try {
@@ -23,7 +24,7 @@ export const isExperienceOwner = async (accessToken: string) => {
       | { error: { status: number; message: string } };
 
     if ("error" in data) {
-      console.error(data.error);
+      captureException(data.error);
       return false;
     }
     return ["owner", "admin", "moderator"].includes(
@@ -73,6 +74,7 @@ export const hasAccess = async (
   ) {
     return redirect("/no-access");
   }
+  setUser({ id: userId.value, username: user.name });
   return {
     user: { id: userId.value, name: user.name },
     experienceId: experienceId.value,
