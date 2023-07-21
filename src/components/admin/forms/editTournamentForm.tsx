@@ -17,7 +17,7 @@ import { editTournament } from "@/actions/admin";
 import { toast } from "sonner";
 import { dayjs } from "@/integrations/dayjs";
 import { minDelay } from "@/utils/minDelay";
-import type { TourneySession } from "@/utils/session";
+import type { TourneySession } from "@/actions/session";
 
 interface EditTournamentFormProps {
   id: string;

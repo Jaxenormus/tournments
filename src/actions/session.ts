@@ -1,3 +1,5 @@
+"use server";
+
 import { cookies } from "next/dist/client/components/headers";
 import { prisma } from "../../prisma";
 import { redirect } from "next/navigation";

@@ -6,7 +6,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
-import { hasAccess } from "@/utils/session";
+import { hasAccess } from "@/actions/session";
 import Link from "next/link";
 
 const AdminNewPage = async () => {

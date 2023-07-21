@@ -2,7 +2,7 @@ import { listTournaments } from "@/actions/admin";
 import { AdminTournamentTable } from "@/components/admin/tournamentTable";
 import { Header } from "@/components/common/header";
 
-import { hasAccess } from "@/utils/session";
+import { hasAccess } from "@/actions/session";
 
 
 const AdminPage = async () => {

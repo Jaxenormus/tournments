@@ -15,7 +15,7 @@ import {
 import { dayjs } from "@/integrations/dayjs";
 
 import { getTournamentTitle } from "@/utils/getTournamentTitle";
-import { hasAccess } from "@/utils/session";
+import { hasAccess } from "@/actions/session";
 
 import Link from "next/link";
 import { notFound } from "next/navigation";

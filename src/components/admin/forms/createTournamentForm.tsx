@@ -14,7 +14,7 @@ import { dayjs } from "@/integrations/dayjs";
 import { minDelay } from "@/utils/minDelay";
 import { createTournament } from "@/actions/admin";
 import { toast } from "sonner";
-import type { TourneySession } from "@/utils/session";
+import type { TourneySession } from "@/actions/session";
 
 interface CreateTournamentFormProps {
   session: TourneySession;

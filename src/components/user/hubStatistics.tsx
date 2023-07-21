@@ -1,6 +1,6 @@
 import { getHubStatistics } from "@/actions/user";
 import { StatisticCard } from "@/components/user/statisticCard";
-import type { TourneySession } from "@/utils/session";
+import type { TourneySession } from "@/actions/session";
 
 interface HubStatisticsProps {
   session: TourneySession;

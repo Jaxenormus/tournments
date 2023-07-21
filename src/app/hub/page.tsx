@@ -1,7 +1,7 @@
 import { listExperienceTournaments } from "@/actions/user";
 import { ExperienceTournamentCard } from "@/components/user/experienceTournamentCard";
 import { Button } from "@/components/ui/button/button";
-import { hasAccess } from "@/utils/session";
+import { hasAccess } from "@/actions/session";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { HubStatistics } from "@/components/user/hubStatistics";

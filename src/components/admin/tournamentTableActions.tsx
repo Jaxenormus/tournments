@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import { getBaseUrl } from "@/utils/getBaseUrl";
-import type { TourneySession } from "@/utils/session";
+import type { TourneySession } from "@/actions/session";
 
 import { Eye, Share2, Settings, Medal, Trash2 } from "lucide-react";
 import Link from "next/link";

@@ -3,7 +3,7 @@ import {
   listExperienceTournaments,
 } from "@/actions/user";
 import { ExperienceTournamentCard } from "@/components/user/experienceTournamentCard";
-import { hasAccess } from "@/utils/session";
+import { hasAccess } from "@/actions/session";
 import { HubStatistics } from "@/components/user/hubStatistics";
 import { Header } from "@/components/common/header";
 

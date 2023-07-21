@@ -11,7 +11,7 @@ import type {
 import { prisma } from "../../prisma";
 import { dayjs } from "@/integrations/dayjs";
 import { notFound } from "next/navigation";
-import type { TourneySession } from "@/utils/session";
+import type { TourneySession } from "@/actions/session";
 import { tournamentRevalidation } from "@/actions";
 import { inngest } from "@/inngest/client";
 
