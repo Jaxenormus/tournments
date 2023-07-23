@@ -26,7 +26,7 @@ export const CreateTournamentForm = (props: CreateTournamentFormProps) => {
   const form = useForm<z.infer<typeof createTournamentSchema>>({
     resolver: zodResolver(createTournamentSchema),
     defaultValues: {
-      date: dayjs().format("YYYY-MM-DDTHH:mm"),
+      date: dayjs().add(1, "day").format("YYYY-MM-DDTHH:mm"),
       experienceIds: [props.session.experienceId],
     },
   });
