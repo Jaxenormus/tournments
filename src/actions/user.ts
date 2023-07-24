@@ -80,7 +80,7 @@ export const joinExperienceTournament = async (
   if (!user) return { error: "Unable to find authenticated user" };
   const credit = await prisma.credit.findFirst({
     where: {
-      // experienceIds: { has: session.experienceId },
+      experienceIds: { has: session.experienceId },
       user: { id: session.user.id },
     },
   });
@@ -132,8 +132,7 @@ export const getHubStatistics = async (session: TourneySession) => {
   const user = await prisma.user.findFirst({
     where: { id: session.user.id },
     select: {
-      // credits: { where: { experienceIds: { has: session.experienceId } } },
-      credits: true,
+      credits: { where: { experienceIds: { has: session.experienceId } } },
     },
   });
   const upcomingTournaments = await prisma.tournament.count({
