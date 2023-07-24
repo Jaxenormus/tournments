@@ -4,6 +4,7 @@ import { cookies } from "next/dist/client/components/headers";
 import { prisma } from "@/prisma";
 import { redirect } from "next/navigation";
 import { captureException, setUser } from "@sentry/nextjs";
+import { WhopError } from "@/errors/WhopError";
 
 export const isExperienceOwner = async (accessToken: string) => {
   try {
@@ -24,7 +25,7 @@ export const isExperienceOwner = async (accessToken: string) => {
       | { error: { status: number; message: string } };
 
     if ("error" in data) {
-      captureException(data.error);
+      captureException(new WhopError(data.error));
       return false;
     }
     return ["owner", "admin", "moderator"].includes(
@@ -53,7 +54,7 @@ export const isExperienceConsumer = async (
       | { error: { status: number; message: string } };
 
     if ("error" in data) {
-      captureException(data.error);
+      captureException(new WhopError(data.error));
       return false;
     }
 

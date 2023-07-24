@@ -3,6 +3,7 @@ import { prisma } from "@/prisma";
 import type { TournamentStatus } from "@prisma/client";
 import { tournamentRevalidation } from "@/actions";
 import { captureException } from "@sentry/nextjs";
+import { WhopError } from "@/errors/WhopError";
 
 export const findExperienceTournament = async (
   session: TourneySession,
@@ -120,7 +121,7 @@ export const fetchWhopExperienceName = async (
     | { error: { status: number; message: string } };
 
   if ("error" in experienceData) {
-    captureException(experienceData.error);
+    captureException(new WhopError(experienceData.error));
     return "Tournaments";
   }
 
