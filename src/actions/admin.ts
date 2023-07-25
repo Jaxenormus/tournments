@@ -60,7 +60,10 @@ export const findTournament = async (session: TourneySession, id: string) => {
 
 export const listTournaments = async (session: TourneySession) => {
   const tournaments = await prisma.tournament.findMany({
-    where: { user: { id: session.user.id } },
+    where: {
+      user: { id: session.user.id },
+      experienceIds: { has: session.experienceId },
+    },
   });
   return tournaments;
 };
