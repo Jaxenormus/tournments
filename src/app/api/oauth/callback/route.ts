@@ -38,7 +38,7 @@ export const GET = async (req: NextRequest) => {
     | { error: { status: number; message: string } };
 
   if ("error" in oauthData) {
-    captureException(new Error(oauthData.error.message));
+    captureException(new Error(JSON.stringify(oauthData)));
     const url = new URL(redirectUri);
     url.pathname = "/no-access";
     return NextResponse.redirect(url);
@@ -68,7 +68,7 @@ export const GET = async (req: NextRequest) => {
     | { error: { status: number; message: string } };
 
   if ("error" in meData) {
-    captureException(new Error(meData.error.message));
+    captureException(new Error(JSON.stringify(oauthData)));
     const url = new URL(redirectUri);
     url.pathname = "/no-access";
     return NextResponse.redirect(url);
